@@ -1,6 +1,7 @@
 var roleSammler = require('role.Sammler');
 var roleUpgrader = require('role.Upgrader');
 var roleBauerbeiter = require('role.Bauerbeiter');
+const { filter } = require('lodash');
 
 
 
@@ -43,4 +44,16 @@ module.exports.loop = function () {
         Game.spawns.Spawn1.createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role:'Bauerbeiter', arbeitet: false});
         }
     }
+
+
+    for(let name in Game.rooms){
+        var towers = Game.rooms[name].find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_TOWER});
+        for(let tower of towers){
+            var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            if (target != undefined){
+                tower.attack(target);
+            }
+        }
+    }
+
 }
