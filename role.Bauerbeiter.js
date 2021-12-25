@@ -1,0 +1,39 @@
+var Creep = require('Creep');
+var roleUpgrader = require('role.Upgrader');
+
+module.exports = {
+
+    run: function(creep){
+
+        Creep.arbeitEinteilen(creep);
+
+        //Wenn arbeitet -> arbeit machen
+        if (creep.memory.arbeitet){
+            //Extensions bevorzugen
+            var extension = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType == STRUCTURE_EXTENSION}});
+            if(extension != undefined){
+                this.bauen(creep,extension);
+            //Sonst alle anderen Gebaeude    
+            }else{
+                var gebaeude = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                //Wenn es arbeit gibt -> arbeite
+                if (gebaeude != undefined){
+                    this.bauen(creep,gebaeude);
+                //Wenn es keine arbeit gibt -> werde upgrader    
+                }else{
+                    roleUpgrader.run(creep);
+                }
+            }
+        //arbeit nicht -> Energie aufladen    
+        }else{
+            Creep.energieHolen(creep);
+        }
+     }
+
+     ,bauen: function(creep,ziel){
+        if(creep.build(ziel) == ERR_NOT_IN_RANGE){
+            creep.moveTo(ziel);
+        } 
+     }
+
+};
