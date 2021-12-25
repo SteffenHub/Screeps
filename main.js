@@ -28,8 +28,10 @@ module.exports.loop = function () {
         }
     }
 
+    //Wenn nicht genug Sammler -> Sammler herstellen
     if (_.sum(Game.creeps, (c) => c.memory.role == 'Sammler') < 4){
         Game.spawns.Spawn1.createCreep([WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role:'Sammler', arbeitet: false});
+    //Wenn nicht genug Upgrader -> Upgrader herstellen   
     }else if(_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader') < 1){
         Game.spawns.Spawn1.createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role:'Upgrader', arbeitet: false});
     }else{
@@ -40,12 +42,14 @@ module.exports.loop = function () {
         //Wenn genug Creeps am Leben sind -> Tower voll machen
         if(anzahlSammler >= 4 && anzahlUpgrader >= 1 && anzahlBauerbeiter >= 2 && tower != undefined){
         
+        //Default
         }else{    
         Game.spawns.Spawn1.createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role:'Bauerbeiter', arbeitet: false});
         }
     }
 
 
+    //Die Tower schiessen lassen im Ernstfall
     for(let name in Game.rooms){
         var towers = Game.rooms[name].find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_TOWER});
         for(let tower of towers){

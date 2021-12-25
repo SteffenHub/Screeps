@@ -15,16 +15,23 @@ module.exports = {
                 this.bauen(creep,extension);
             //Sonst alle anderen Gebaeude    
             }else{
-                var gebaeude = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-                //Wenn es arbeit gibt -> arbeite
-                if (gebaeude != undefined){
-                    this.bauen(creep,gebaeude);
-                //Wenn es keine arbeit gibt -> werde upgrader    
+                var kaputtesGebauede = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: (s) => s.hits < (s.hitsMax/2) && s.structureType != STRUCTURE_WALL});
+                //Wenn ein Gebauede mit 50% Leben existiert
+                if(kaputtesGebauede != undefined){
+                    this.reparieren(creep,kaputtesGebauede);
+                //Sonst baue neue Sachen
                 }else{
-                    roleUpgrader.run(creep);
+                    var gebaeude = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                    //Wenn es arbeit gibt -> arbeite
+                    if (gebaeude != undefined){
+                        this.bauen(creep,gebaeude);
+                    //Wenn es keine arbeit gibt -> werde upgrader    
+                    }else{
+                        roleUpgrader.run(creep);
+                    }
                 }
             }
-        //arbeit nicht -> Energie aufladen    
+        //arbeit nicht -> Energie aufladen
         }else{
             Creep.energieHolen(creep);
         }
@@ -34,6 +41,12 @@ module.exports = {
         if(creep.build(ziel) == ERR_NOT_IN_RANGE){
             creep.moveTo(ziel);
         } 
+     }
+
+     ,reparieren: function(creep,ziel){
+         if(creep.repair(ziel) == ERR_NOT_IN_RANGE){
+             creep.moveTo(ziel);
+         }
      }
 
 };
