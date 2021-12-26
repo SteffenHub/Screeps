@@ -1,41 +1,9 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('Creep');
- * mod.thing == 'a thing'; // true
- */
 
 const { functionsIn } = require("lodash");
 
 module.exports = {
 
-    arbeitEinteilen: function(creep){
-        //Wenn Energie voll
-        if (creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0){
-            creep.memory.arbeitet = true;
-        }
-        //Wenn Energie leer
-        else if (creep.store.getFreeCapacity(RESOURCE_ENERGY) == creep.store.getCapacity(RESOURCE_ENERGY)){
-            creep.memory.arbeitet = false;
-        }
-    }
-
-    ,energieHolen: function(creep){
-        var energy = creep.pos.findClosestByPath(FIND_SOURCES);
-        if (creep.harvest(energy) == ERR_NOT_IN_RANGE){
-            creep.moveTo(energy);
-        }
-    }
-
-    ,energieAbgeben: function(creep,ziel){
-        if(creep.transfer(ziel, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
-            creep.moveTo(ziel);
-        }
-    }
-
-    ,freieEnergieExistiert: function(creep){
+    freieEnergieExistiert: function(creep){
         var droppedSource = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
         if (droppedSource == undefined){
             return false;

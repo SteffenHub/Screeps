@@ -1,14 +1,11 @@
-var Creep = require('Creep');
 var roleUpgrader = require('role.Upgrader');
 
 module.exports = {
 
     run: function(creep){
 
-        Creep.arbeitEinteilen(creep);
-
         //Wenn arbeitet -> arbeit machen
-        if (creep.memory.arbeitet){           
+        if (creep.arbeitet()){           
             //Extensions bevorzugen
             var extension = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType == STRUCTURE_EXTENSION}});
             if(extension != undefined){              
@@ -46,7 +43,7 @@ module.exports = {
             }
         //arbeit nicht -> Energie aufladen
         }else{
-            Creep.energieHolen(creep);
+            creep.holeEnergie();
         }
      }
 
