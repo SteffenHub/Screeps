@@ -1,6 +1,7 @@
 var roleSammler = require('role.Sammler');
 var roleUpgrader = require('role.Upgrader');
 var roleBauerbeiter = require('role.Bauerbeiter');
+require('prototype.Spawn')();
 const { filter } = require('lodash');
 
 
@@ -30,10 +31,10 @@ module.exports.loop = function () {
 
     //Wenn nicht genug Sammler -> Sammler herstellen
     if (_.sum(Game.creeps, (c) => c.memory.role == 'Sammler') < 4){
-        Game.spawns.Spawn1.createCreep([WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role:'Sammler', arbeitet: false});
+        Game.spawns.Spawn1.spawnSammler();
     //Wenn nicht genug Upgrader -> Upgrader herstellen   
     }else if(_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader') < 1){
-        Game.spawns.Spawn1.createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role:'Upgrader', arbeitet: false});
+        Game.spawns.Spawn1.spawnUpgrader();
     }else{
         var anzahlSammler = _.sum(Game.creeps, (c) => c.memory.role == 'Sammler');
         var anzahlUpgrader = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
@@ -44,7 +45,7 @@ module.exports.loop = function () {
         
         //Default
         }else{    
-        Game.spawns.Spawn1.createCreep([WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role:'Bauerbeiter', arbeitet: false});
+        Game.spawns.Spawn1.spawnBauerbeiter();
         }
     }
 
