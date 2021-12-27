@@ -9,8 +9,16 @@ module.exports = function() {
             }
         }else{
             var droppedEnergy = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {filter: (s) => s.energy > 0});
-            if(this.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
-                this.moveTo(droppedEnergy);
+            if (droppedEnergy != undefined){
+                if(this.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
+                    this.moveTo(droppedEnergy);
+                }
+            }else{
+                var tombstone = this.pos.findClosestByPath(FIND_TOMBSTONES, {filter: (t) => s.store.energy > 0});
+                //TODO for?
+                if(this.pickup(tombstone) == ERR_NOT_IN_RANGE) {
+                    this.moveTo(tombstone);
+                }
             }
         }
     };
