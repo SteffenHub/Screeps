@@ -14,7 +14,7 @@ module.exports = function() {
                     this.moveTo(droppedEnergy);
                 }
             }else{
-                var tombstone = this.pos.findClosestByPath(FIND_TOMBSTONES, {filter: (t) => s.store.energy > 0});
+                var tombstone = this.pos.findClosestByPath(FIND_TOMBSTONES, {filter: (t) => t.store.energy > 0});
                 //TODO for?
                 if(this.pickup(tombstone) == ERR_NOT_IN_RANGE) {
                     this.moveTo(tombstone);
