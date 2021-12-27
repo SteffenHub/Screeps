@@ -3,8 +3,15 @@ module.exports = function() {
 
     Creep.prototype.holeEnergie = function(){
         var energy = this.pos.findClosestByPath(FIND_SOURCES, {filter: (s) => s.energy > 0});
-        if (this.harvest(energy) == ERR_NOT_IN_RANGE){
-            this.moveTo(energy);
+        if(energy != undefined){
+            if (this.harvest(energy) == ERR_NOT_IN_RANGE){
+                this.moveTo(energy);
+            }
+        }else{
+            var droppedEnergy = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {filter: (s) => s.energy > 0});
+            if(this.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
+                this.moveTo(droppedEnergy);
+            }
         }
     };
 
