@@ -3,6 +3,7 @@ var roleUpgrader = require('role.Upgrader');
 var roleBauerbeiter = require('role.Bauerbeiter');
 require('prototype.Spawn')();
 const { filter } = require('lodash');
+var raumUsageTracker = require('raumUsageTracker');
 
 
 
@@ -60,5 +61,10 @@ module.exports.loop = function () {
             }
         }
     }
+
+
+    raumUsageTracker.run();
+    raumUsageTracker.baueStrassen(creep.room);
+    
 
 }
