@@ -2,22 +2,34 @@
 module.exports = function() {
 
     Creep.prototype.holeEnergie = function(){
+        //Erstmal nach richtigen Energie sourcen suchen
         var energy = this.pos.findClosestByPath(FIND_SOURCES, {filter: (s) => s.energy > 0});
         if(energy != undefined){
             if (this.harvest(energy) == ERR_NOT_IN_RANGE){
                 this.moveTo(energy);
             }
+        //Dann nach dropped sources suchen    
         }else{
             var droppedEnergy = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {filter: (s) => s.energy > 0});
             if (droppedEnergy != undefined){
                 if(this.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
                     this.moveTo(droppedEnergy);
                 }
+            //Dann nach grabsteinen suchen    
             }else{
                 var tombstone = this.pos.findClosestByPath(FIND_TOMBSTONES, {filter: (t) => t.store.energy > 0});
-                //TODO for?
-                if(this.pickup(tombstone) == ERR_NOT_IN_RANGE) {
-                    this.moveTo(tombstone);
+                if (tombstone != undefined){
+                    //TODO for?
+                    if(this.pickup(tombstone) == ERR_NOT_IN_RANGE) {
+                        this.moveTo(tombstone);
+                    }
+                //Dann nach ruinen suchen    
+                }else{
+                    var ruine = this.pos.findClosestByPath(FIND_RUINS, {filter: (r) => r.store.energy > 0});
+                    //TODO for?
+                    if(this.pickup(ruine) == ERR_NOT_IN_RANGE) {
+                        this.moveTo(ruine);
+                    }
                 }
             }
         }
