@@ -1,3 +1,6 @@
+const { isEmpty } = require("lodash");
+require('prototype.road.SpeicherVerwaltung')();
+require('prototype.constructionSite.road')();
 
 module.exports = {
 
@@ -6,6 +9,7 @@ module.exports = {
         if (Memory.raumUsage == undefined){
             Memory.raumUsage = new Array(49).fill(new Array(49).fill(0));
             Memory.ticksSeitStrassenUpdate = 0;
+            //Memory.automatischGebauteStrassen = [];
         }
         for (let name in Game.creeps){
             var creep = Game.creeps[name];
@@ -23,17 +27,30 @@ module.exports = {
     }
 
     ,baueStrassen: function(raum){
-        ++Memory.ticksSeitStrassenUpdate;       
+        ++Memory.ticksSeitStrassenUpdate;    
+        this.fuegeEbenErstellteStrassenInMemoryEin(raum); 
+
+        //Zum zuruecksetzen
+        /*
+        var alleStrassenImRaum = this.getAlleStrassenImRaum(raum);
+        for (let i = 0; i < alleStrassenImRaum.length; i++){
+            if (!(alleStrassenImRaum[i].pos.x == 10 && alleStrassenImRaum[i].pos.y == 30) && !(alleStrassenImRaum[i].pos.x == 12 && alleStrassenImRaum[i].pos.y == 32) && !(alleStrassenImRaum[i].pos.x == 11 && alleStrassenImRaum[i].pos.y == 33)){
+                Game.getObjectById(alleStrassenImRaum[i].id).speichere("istAutomatischGebaut", true);
+            }
+        }
+        */
 
 
         //Nach 200 ticks strassen infrastruktur aktualisieren
-        if (Memory.ticksSeitStrassenUpdate%400 == 0){
+        if (Memory.ticksSeitStrassenUpdate%2 == 0){
             //Liste von genutzten orten im Raum mit hauefigkeit
             var nutzung = this.getSortierteListe();
+
             //Liste aller fertigen strassen und nicht fertigen strassen im raum
             var alleStrassenImRaum = this.getAlleStrassenImRaum(raum);
-
-            var anzahlStrassen = 60;
+            console.log("Es existieren derzeit "+ alleStrassenImRaum.length+" Strassen im Raum " + raum.name);
+            
+            var anzahlStrassen = 90;
             //Wenn weniger als $anzahlStrassen strassen benutzt wurden
             if (nutzung.length <= anzahlStrassen){
                 anzahlStrassen = nutzung.length;
@@ -69,11 +86,16 @@ module.exports = {
             //Erstelle neue Strassen
             for (let i = 0; i < nutzung.length; i++){
                 var eintrag = nutzung[i];
-                raum.createConstructionSite(eintrag[1], eintrag[2], STRUCTURE_ROAD);
+                this.baueStrasse(eintrag[1],eintrag[2],raum);
             }
             //zerstoere Strassen, die wir nicht mehr brauchen
             for (let i = 0; i < alleStrassenImRaum.length; i++){
-                alleStrassenImRaum[i].remove();
+                var speicher = Game.getObjectById(alleStrassenImRaum[i].id).getSpeicher();
+                if (speicher != undefined){
+                    if (speicher.istAutomatischGebaut){
+                        this.strasseLoeschen(alleStrassenImRaum[i]);
+                    }
+                }
             }
         }
 
@@ -101,6 +123,38 @@ module.exports = {
         return sortList;
     }
 
+    ,baueStrasse: function(x,y,raum){
+        raum.createConstructionSite(x, y, STRUCTURE_ROAD);
+        var strasse = this.strasseFindenByPos(x,y,raum);
+        if (strasse != undefined){
+            Game.getObjectById(strasse.id).speichere("istAutomatischGebaut",true);
+        }else{
+            if (Memory.roadMemoryTMP == undefined){
+                Memory.roadMemoryTMP = [];
+            }
+            Memory.roadMemoryTMP.push({x:[x], y:[y]});
+            //console.log("Die Strasse an Position (" + x+","+y+") im Raum "+ raum.name + " wurde nicht gefunden");
+        }
+    }
+
+    ,fuegeEbenErstellteStrassenInMemoryEin: function(raum){
+        if (Memory.roadMemoryTMP != undefined){
+            var geradeErstellteStrassen = Memory.roadMemoryTMP;
+            for (let i = 0; i < geradeErstellteStrassen.length; i++){
+                var dieseStrasse = geradeErstellteStrassen[i];
+                var strasse = this.strasseFindenByPos(dieseStrasse.x,dieseStrasse.y,raum);
+                if (strasse != undefined){
+                    Game.getObjectById(strasse.id).speichere("istAutomatischGebaut",true);
+                    Memory.roadMemoryTMP.splice(i,1);
+                    --i;
+                }
+            }
+        }
+        if (isEmpty(Memory.roadMemoryTMP)){
+            Memory.roadMemoryTMP = undefined;
+        }
+    }
+
     /**
      * Gibt eine Liste aller fertigen Strassen und nicht fertigen strassen aus
      */
@@ -109,4 +163,34 @@ module.exports = {
         var fertigeStrassen = raum.find(FIND_STRUCTURES, { filter: (s) => {return s.structureType == STRUCTURE_ROAD}});
         return nichtFertigeStrassen.concat(fertigeStrassen);
     }
+
+    ,strasseFindenByPos: function(x,y,raum){
+        var b = raum.find(FIND_CONSTRUCTION_SITES, {filter: (s) => s.structureType == STRUCTURE_ROAD && s.pos.x == x && s.pos.y == y && s.pos.roomName == raum.name});
+        if (b != undefined && !isEmpty(b)){
+            if (b[0] != undefined){
+                b = b[0];
+            }
+            return b;
+        }
+        var a = raum.find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_ROAD && s.pos.x == x && s.pos.y == y && s.pos.roomName == raum.name});
+        if (a != undefined && !isEmpty(a)){
+            if (a[0] != undefined){
+                a = a[0];
+            }
+            return a;
+        }
+        return undefined;
+    }
+
+    ,strasseLoeschen: function(strasse){
+        Game.getObjectById(strasse.id).loscheGanzenSpeicher();
+        if (strasse.progress != undefined){
+            Game.getObjectById(strasse.id).remove();
+        }else{
+            Memory.tmp = Game.getObjectById(strasse.id);
+            Game.getObjectById(strasse.id).destroy();
+        }
+        
+    }
+
 };
