@@ -41,8 +41,8 @@ module.exports = {
         */
 
 
-        //Nach 200 ticks strassen infrastruktur aktualisieren
-        if (Memory.ticksSeitStrassenUpdate%2 == 0){
+        //Nach 400 ticks strassen infrastruktur aktualisieren
+        if (Memory.ticksSeitStrassenUpdate%400 == 0){
             //Liste von genutzten orten im Raum mit hauefigkeit
             var nutzung = this.getSortierteListe();
 
