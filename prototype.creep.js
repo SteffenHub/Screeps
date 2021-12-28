@@ -18,24 +18,25 @@ module.exports = function() {
             //Dann nach grabsteinen suchen    
             }else{
                 var tombstone = this.pos.findClosestByPath(FIND_TOMBSTONES, {filter: (t) => t.store.energy > 0});
-                //Wenn es eine Liste ist(mehr als ein Grabstein)
-                if (tombstone[0] != undefined){
-                    tombstone = tombstone[0];
-                }
                 if (tombstone != undefined){
+                    //Wenn es eine Liste ist(mehr als ein Grabstein)
+                    if (tombstone[0] != undefined){
+                        tombstone = tombstone[0];
+                    }
                     if(this.withdraw(tombstone,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         this.moveTo(tombstone);
                     }
                 //Dann nach ruinen suchen    
                 }else{
                     var ruine = this.pos.findClosestByPath(FIND_RUINS, {filter: (r) => r.store.energy > 0});
-                    //Wenn es eine Liste ist(mehr als eine ruine)
-                    if (ruine[0] != undefined){
-                        ruine = ruine[0];
-                    }
-                    //TODO for?
-                    if(this.withdraw(ruine,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        this.moveTo(ruine);
+                    if (ruine != undefined){
+                        //Wenn es eine Liste ist(mehr als eine ruine)
+                        if (ruine[0] != undefined){
+                            ruine = ruine[0];
+                        }
+                        if(this.withdraw(ruine,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            this.moveTo(ruine);
+                        }
                     }
                 }
             }
