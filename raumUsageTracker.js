@@ -22,7 +22,10 @@ module.exports = {
             //Wenn der creep sich bewegt hat
             if(creep.memory.letztePos.x != creep.pos.x || creep.memory.letztePos.y != creep.pos.y){
                 creep.memory.letztePos = creep.pos;
-                ++Memory.raumUsage[creep.pos.x][creep.pos.y];
+                //Am Rand koennen keine Strassen gebaut werden
+                if (creep.pos.x != 0 && creep.pos.x != 49 && creep.pos.y != 0 && creep.pos.y != 49){
+                    ++Memory.raumUsage[creep.pos.x][creep.pos.y];
+                }
             }
         }
     }
@@ -125,16 +128,18 @@ module.exports = {
     }
 
     ,baueStrasse: function(x,y,raum){
-        raum.createConstructionSite(x, y, STRUCTURE_ROAD);
-        var strasse = this.strasseFindenByPos(x,y,raum);
-        if (strasse != undefined){
-            Game.getObjectById(strasse.id).speichere("istAutomatischGebaut",true);
-        }else{
-            if (Memory.roadMemoryTMP == undefined){
-                Memory.roadMemoryTMP = [];
+        //Wenn strasse gebaut werden kann
+        if(raum.createConstructionSite(x, y, STRUCTURE_ROAD) >= 0){
+            var strasse = this.strasseFindenByPos(x,y,raum);
+            if (strasse != undefined){
+                Game.getObjectById(strasse.id).speichere("istAutomatischGebaut",true);
+            }else{
+                if (Memory.roadMemoryTMP == undefined){
+                    Memory.roadMemoryTMP = [];
+                }
+                Memory.roadMemoryTMP.push({x:[x], y:[y]});
+                //console.log("Die Strasse an Position (" + x+","+y+") im Raum "+ raum.name + " wurde nicht gefunden");
             }
-            Memory.roadMemoryTMP.push({x:[x], y:[y]});
-            //console.log("Die Strasse an Position (" + x+","+y+") im Raum "+ raum.name + " wurde nicht gefunden");
         }
     }
 
