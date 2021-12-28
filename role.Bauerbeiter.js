@@ -19,8 +19,8 @@ module.exports = {
                 }else{
                     //Wenn er eine Reparier Auftrag hat
                     if (creep.memory.reparierZiel != undefined){
-                        if (Game.getObjectById(creep.memory.reparierZiel.id) != undefined || isEmpty(Game.getObjectById(creep.memory.reparierZiel.id))){
-                            Creep.Memory.reparierZiel = undefined;
+                        if (Game.getObjectById(creep.memory.reparierZiel.id) == undefined){
+                            creep.Memory.reparierZiel = undefined;
                         }else{
                             //Wenn das zu reparierende Gebauede fertig repariert ist
                             if (Game.getObjectById(creep.memory.reparierZiel.id).hits == Game.getObjectById(creep.memory.reparierZiel.id).hitsMax){     
