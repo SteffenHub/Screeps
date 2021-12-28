@@ -9,7 +9,8 @@ module.exports = {
         if (Memory.raumUsage == undefined){
             Memory.raumUsage = new Array(49).fill(new Array(49).fill(0));
             Memory.ticksSeitStrassenUpdate = 0;
-            //Memory.automatischGebauteStrassen = [];
+            //Diesen Tick nichts mehr machen, sonst raumUsage ist noch undefined
+            return;
         }
         for (let name in Game.creeps){
             var creep = Game.creeps[name];
