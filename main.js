@@ -4,6 +4,7 @@ var roleBauerbeiter = require('role.Bauerbeiter');
 require('prototype.Spawn')();
 const { filter } = require('lodash');
 var raumUsageTracker = require('raumUsageTracker');
+require('prototype.Tower')();
 
 
 

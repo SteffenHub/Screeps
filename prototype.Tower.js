@@ -8,7 +8,7 @@ module.exports = function(){
         }
     };
 
-    StructureTower.prototype.sucheGegner(){
+    StructureTower.prototype.sucheGegner = function(){
         return this.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
     };
 
