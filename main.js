@@ -36,18 +36,9 @@ module.exports.loop = function () {
     //Wenn nicht genug Upgrader -> Upgrader herstellen   
     }else if(_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader') < 1){
         Game.spawns.Spawn1.spawnUpgrader();
-    }else{
-        var anzahlSammler = _.sum(Game.creeps, (c) => c.memory.role == 'Sammler');
-        var anzahlUpgrader = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
-        var anzahlBauerbeiter = _.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter');
-        var tower = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy < s.energyCapacity});
-        //Wenn genug Creeps am Leben sind -> Tower voll machen
-        if(anzahlSammler >= 4 && anzahlUpgrader >= 1 && anzahlBauerbeiter >= 2 && tower != undefined){
-        
-        //Default
-        }else{    
+    //Default    
+    }else{  
         Game.spawns.Spawn1.spawnBauerbeiter();
-        }
     }
 
 
@@ -55,16 +46,13 @@ module.exports.loop = function () {
     for(let name in Game.rooms){
         var towers = Game.rooms[name].find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_TOWER});
         for(let tower of towers){
-            var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-            if (target != undefined){
-                tower.attack(target);
-            }
+            tower.run();
         }
     }
 
 
     raumUsageTracker.run();
     raumUsageTracker.baueStrassen(creep.room);
-    
+
 
 }
