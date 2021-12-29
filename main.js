@@ -1,14 +1,22 @@
 var roleSammler = require('role.Sammler');
 var roleUpgrader = require('role.Upgrader');
 var roleBauerbeiter = require('role.Bauerbeiter');
+
 require('prototype.Spawn')();
-const { filter } = require('lodash');
-var raumUsageTracker = require('raumUsageTracker');
+require('prototype.room.usageTracker')();
 require('prototype.Tower')();
 
+var raumUsageTracker = require('raumUsageTracker');
+
+const { filter } = require('lodash');
 
 
 module.exports.loop = function () {
+
+    //Die Schritte der creeps tracken
+    for (let name in Game.rooms){
+        Game.rooms[name].trackUsage();
+    }
 
     //Tote Creeps loeschen
     for(let name in Memory.creeps){
@@ -54,6 +62,5 @@ module.exports.loop = function () {
 
     raumUsageTracker.run();
     raumUsageTracker.baueStrassen(creep.room);
-
 
 }
