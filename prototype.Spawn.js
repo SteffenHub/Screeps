@@ -1,32 +1,64 @@
-
 module.exports = function() {
 
+    /**
+     * Wenn Energie voll ist wird ein Sammler gespawnt
+     */
     StructureSpawn.prototype.spawnSammler = function(){
-        //var konfiguration = [WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE];
         var argumente = {role:'Sammler', arbeitet: false};
         this.spawnCreep(this.getBalancedKonfiguration(),argumente);
     };
 
+    /**
+     * Wenn Energie voll ist wird ein Upgrader gespawnt
+     */
     StructureSpawn.prototype.spawnUpgrader = function(){
-        //var konfiguration = [WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
         var argumente = {role:'Upgrader', arbeitet: false};
         this.spawnCreep(this.getBalancedKonfiguration(),argumente);
     };
 
+    /**
+     * Wenn Energie voll ist wird ein Bauerbeiter gespawnt
+     */
     StructureSpawn.prototype.spawnBauerbeiter = function(){
-        //var konfiguration = [WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
         var argumente = {role:'Bauerbeiter', arbeitet: false};
         this.spawnCreep(this.getBalancedKonfiguration(),argumente);
     };
 
 
+
+
+
+
+
+    /**                         **\
+     *                           *
+     *                           *
+     *      PRIVATE METHODEN     *
+     *                           *
+     *                           *
+    \*                           */
+
+
+
+
+
+
     /**
-     * private Methods
+     * Spawnt einen Creep mit gegebener Konfiguration und argumenten
+     * 
+     * @param {*} konfiguration die Konfiguration, wie der Creep aufgebaut werden soll
+     * @param {*} argumente die Argumente, die der Creep in seinem Speicher tragen soll
      */
     StructureSpawn.prototype.spawnCreep = function(konfiguration,argumente){
         this.createCreep(konfiguration, undefined, argumente);
     };
 
+    /**
+     * Gibt einen Creep aus, der moeglichste ausgeglichen ist.
+     * Dabei folgende Hierarchi(WORK,CARRY,MOVE)
+     * 
+     * @returns ein Array mit der Konfiguration
+     */
     StructureSpawn.prototype.getBalancedKonfiguration = function(){
         var raumEnergie = this.room.energyCapacityAvailable;
         var konfigurationTmp = [];
@@ -72,5 +104,4 @@ module.exports = function() {
 
         return konfiguration;
     };
-
 };
