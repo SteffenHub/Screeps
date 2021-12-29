@@ -8,7 +8,7 @@ module.exports = function() {
      * @param {*} name Der Name, den der Eintrag haben soll(zum wiederfinden)
      * @param {*} wert Ordne dem einen Wert zu
      */
-    StructureRoad.prototype.speichere = function(name, wert){
+     StructureRoad.prototype.speichere = function(name, wert){
         if (Memory.roadMemory == undefined){
             Memory.roadMemory = [];
         }
@@ -24,52 +24,15 @@ module.exports = function() {
      * 
      * @returns Gibt den Gesamten Speicher fuer dieses Objekt aus, falls kein Speicher exisitiert -> undefined
      */
-    StructureRoad.prototype.getSpeicher = function(){
-        if (Memory.roadMemory == undefined){
-            Memory.roadMemory = [];
+     StructureRoad.prototype.getSpeicher = function(){
+        if (Memory.roadMemory == undefined || isEmpty(Memory.roadMemory)){
             return undefined;
         }
-        if (isEmpty(Memory.roadMemory)){
-            return undefined;
-        }
-        for(i = 0; i < Memory.roadMemory.length; i++){
-            if (this.id == Memory.roadMemory[i].id){
-                return Memory.roadMemory[i];
-            }
+        var stelleImSpeicher = this.findeStelleImRoadSpeicher();
+        if(stelleImSpeicher >= 0){
+            return Memory.roadMemory[stelleImSpeicher];
         }
         return undefined;
-    };
-
-    /**
-     * PRIVATE Funktion
-     * Speichert einen Eintrag, wenn bereits ein Speicher fuer dieses Objekt angelegt wurde
-     * 
-     * @param {*} name Der Name, den der Eintrag haben soll(zum wiederfinden)
-     * @param {*} wert Ordne dem einen Wert zu
-     */
-    StructureRoad.prototype.speicherInExisitiertenSpeicher = function(name,wert){
-        var stelleImSpeicher = this.findeStelleImRoadSpeicher();
-        if (stelleImSpeicher >= 0){
-            Memory.roadMemory[stelleImSpeicher][[name]] = wert;
-        }
-    };
-
-    /**
-     * PRIVATE Funktion
-     * findet den Index, an dem der Objekt Speicher in der Memory liegt
-     * 
-     * @returns den Index, wenn nicht existiert -> -1
-     */
-    StructureRoad.prototype.findeStelleImRoadSpeicher = function(){
-        if (isEmpty(Memory.roadMemory)){
-            return -1;
-        }
-        for(i = 0; i < Memory.roadMemory.length; i++){
-            if (this.id == Memory.roadMemory[i].id){
-                return i;
-            }
-        }
-        return -1;
     };
 
     /**
@@ -77,7 +40,7 @@ module.exports = function() {
      * 
      * @param {*} name Der Name des Eintrages
      */
-    StructureRoad.prototype.loscheEintragImSpeicher = function(name){
+     StructureRoad.prototype.loscheEintragImSpeicher = function(name){
         if (name == "id"){
             console.log("Du solltest die ID nicht loeschen");
         }else{
@@ -91,10 +54,57 @@ module.exports = function() {
     /**
      * Loescht den gesamten Speicher, der fuer dieses Objekt angelegt wurde
      */
-    StructureRoad.prototype.loscheGanzenSpeicher = function(){
+     StructureRoad.prototype.loscheGanzenSpeicher = function(){
         var stelleImSpeicher = this.findeStelleImRoadSpeicher();
         if (stelleImSpeicher >= 0){
             Memory.roadMemory.splice(stelleImSpeicher,1);
         }
+    };
+
+
+
+
+
+
+    /**                         **\
+     *                           *
+     *                           *
+     *      PRIVATE METHODEN     *
+     *                           *
+     *                           *
+    \*                           */
+
+
+
+
+
+    /**
+     * Speichert einen Eintrag, wenn bereits ein Speicher fuer dieses Objekt angelegt wurde
+     * 
+     * @param {*} name Der Name, den der Eintrag haben soll(zum wiederfinden)
+     * @param {*} wert Ordne dem einen Wert zu
+     */
+     StructureRoad.prototype.speicherInExisitiertenSpeicher = function(name,wert){
+        var stelleImSpeicher = this.findeStelleImRoadSpeicher();
+        if (stelleImSpeicher >= 0){
+            Memory.roadMemory[stelleImSpeicher][[name]] = wert;
+        }
+    };
+
+    /**
+     * findet den Index, an dem der Objekt Speicher in der Memory liegt
+     * 
+     * @returns den Index, wenn nicht existiert -> -1
+     */
+     StructureRoad.prototype.findeStelleImRoadSpeicher = function(){
+        if (isEmpty(Memory.roadMemory)){
+            return -1;
+        }
+        for(i = 0; i < Memory.roadMemory.length; i++){
+            if (this.id == Memory.roadMemory[i].id){
+                return i;
+            }
+        }
+        return -1;
     };
 };
