@@ -21,7 +21,7 @@ module.exports = function() {
      * @returns Gibt den Gesamten Speicher fuer dieses Objekt aus, falls kein Speicher exisitiert -> undefined
      */
     Room.prototype.getSpeicher = function(){
-        speicherVerwaltung.getSpeicher(memoryName, this.name);
+        return speicherVerwaltung.getSpeicher(memoryName, this.name);
     };
 
     /**

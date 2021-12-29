@@ -21,7 +21,7 @@ module.exports = function() {
      * @returns Gibt den Gesamten Speicher fuer dieses Objekt aus, falls kein Speicher exisitiert -> undefined
      */
     StructureRoad.prototype.getSpeicher = function(){
-        speicherVerwaltung.getSpeicher(memoryName, this.id);
+        return speicherVerwaltung.getSpeicher(memoryName, this.id);
     };
 
     /**
