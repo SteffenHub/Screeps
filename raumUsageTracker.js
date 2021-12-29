@@ -1,6 +1,6 @@
 const { isEmpty } = require("lodash");
 require('prototype.road.SpeicherVerwaltung')();
-require('prototype.constructionSite.road')();
+require('prototype.constructionSite.road.speicherVerwaltung')();
 
 module.exports = {
 
@@ -46,15 +46,14 @@ module.exports = {
 
 
         //Nach 400 ticks strassen infrastruktur aktualisieren
-        if (Memory.ticksSeitStrassenUpdate%400 == 0){
+        if (Memory.ticksSeitStrassenUpdate%600 == 0){
             //Liste von genutzten orten im Raum mit hauefigkeit
             var nutzung = this.getSortierteListe();
 
             //Liste aller fertigen strassen und nicht fertigen strassen im raum
             var alleStrassenImRaum = this.getAlleStrassenImRaum(raum);
-            console.log("Es existieren derzeit "+ alleStrassenImRaum.length+" Strassen im Raum " + raum.name);
             
-            var anzahlStrassen = 90;
+            var anzahlStrassen = 60;
             //Wenn weniger als $anzahlStrassen strassen benutzt wurden
             if (nutzung.length <= anzahlStrassen){
                 anzahlStrassen = nutzung.length;
@@ -104,7 +103,7 @@ module.exports = {
         }
 
         //Alle Daten zuruecksetzen
-        if (Memory.ticksSeitStrassenUpdate > 2500){
+        if (Memory.ticksSeitStrassenUpdate > 3500){
             Memory.raumUsage = undefined;
         }
     }
@@ -158,6 +157,7 @@ module.exports = {
         }
         if (isEmpty(Memory.roadMemoryTMP)){
             Memory.roadMemoryTMP = undefined;
+            console.log("Es existieren derzeit "+ this.getAlleStrassenImRaum().length+" Strassen im Raum " + raum.name);
         }
     }
 
