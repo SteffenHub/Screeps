@@ -12,7 +12,7 @@ module.exports = function() {
      * @param {*} wert Ordne dem einen Wert zu
      */
     Room.prototype.speichere = function(name, wert){
-        speicherVerwaltung.speichere(this.memoryName, this.name, name, wert);
+        speicherVerwaltung.speichere(memoryName, this.name, name, wert);
     };
 
     /**
@@ -21,7 +21,7 @@ module.exports = function() {
      * @returns Gibt den Gesamten Speicher fuer dieses Objekt aus, falls kein Speicher exisitiert -> undefined
      */
     Room.prototype.getSpeicher = function(){
-        speicherVerwaltung.getSpeicher(this.memoryName, this.name);
+        speicherVerwaltung.getSpeicher(memoryName, this.name);
     };
 
     /**
@@ -30,14 +30,14 @@ module.exports = function() {
      * @param {*} name Der Name des Eintrages
      */
     Room.prototype.loscheEintragImSpeicher = function(name){
-        speicherVerwaltung.loscheEintragImSpeicher(this.memoryName, this.name, name);
+        speicherVerwaltung.loscheEintragImSpeicher(memoryName, this.name, name);
     };
 
     /**
      * Loescht den gesamten Speicher, der fuer dieses Objekt angelegt wurde
      */
     Room.prototype.loscheGanzenSpeicher = function(){
-        speicherVerwaltung.loscheGanzenSpeicher(this.memoryName, this.name);
+        speicherVerwaltung.loscheGanzenSpeicher(memoryName, this.name);
     };
 
     /**
@@ -46,6 +46,6 @@ module.exports = function() {
      * @returns den Index, wenn nicht existiert -> -1
      */
     Room.prototype.findeStelleImRoadSpeicher = function(){
-        return speicherVerwaltung.findeStelleImRoadSpeicher(this.memoryName, this.name);
+        return speicherVerwaltung.findeStelleImRoadSpeicher(memoryName, this.name);
     };
 };

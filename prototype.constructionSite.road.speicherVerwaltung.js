@@ -12,7 +12,7 @@ module.exports = function() {
      * @param {*} wert Ordne dem einen Wert zu
      */
     ConstructionSite.prototype.speichere = function(name, wert){
-        speicherVerwaltung.speichere(this.memoryName, this.id, name, wert);
+        speicherVerwaltung.speichere(memoryName, this.id, name, wert);
     };
 
     /**
@@ -21,7 +21,7 @@ module.exports = function() {
      * @returns Gibt den Gesamten Speicher fuer dieses Objekt aus, falls kein Speicher exisitiert -> undefined
      */
     ConstructionSite.prototype.getSpeicher = function(){
-        speicherVerwaltung.getSpeicher(this.memoryName, this.id);
+        speicherVerwaltung.getSpeicher(memoryName, this.id);
     };
 
     /**
@@ -30,14 +30,14 @@ module.exports = function() {
      * @param {*} name Der Name des Eintrages
      */
     ConstructionSite.prototype.loscheEintragImSpeicher = function(name){
-        speicherVerwaltung.loscheEintragImSpeicher(this.memoryName, this.id, name);
+        speicherVerwaltung.loscheEintragImSpeicher(memoryName, this.id, name);
     };
 
     /**
      * Loescht den gesamten Speicher, der fuer dieses Objekt angelegt wurde
      */
     ConstructionSite.prototype.loscheGanzenSpeicher = function(){
-        speicherVerwaltung.loscheGanzenSpeicher(this.memoryName, this.id);
+        speicherVerwaltung.loscheGanzenSpeicher(memoryName, this.id);
     };
 
     /**
@@ -46,6 +46,6 @@ module.exports = function() {
      * @returns den Index, wenn nicht existiert -> -1
      */
     ConstructionSite.prototype.findeStelleImRoadSpeicher = function(){
-        return speicherVerwaltung.findeStelleImRoadSpeicher(this.memoryName, this.id);
+        return speicherVerwaltung.findeStelleImRoadSpeicher(memoryName, this.id);
     };
 };
