@@ -53,7 +53,7 @@ module.exports = {
             //Liste aller fertigen strassen und nicht fertigen strassen im raum
             var alleStrassenImRaum = this.getAlleStrassenImRaum(raum);
             
-            var anzahlStrassen = 60;
+            var anzahlStrassen = 35;
             //Wenn weniger als $anzahlStrassen strassen benutzt wurden
             if (nutzung.length <= anzahlStrassen){
                 anzahlStrassen = nutzung.length;
@@ -100,6 +100,7 @@ module.exports = {
                     }
                 }
             }
+            console.log("Strassen im Raum " + raum.name + " wurden aktuallisiert");
         }
 
         //Alle Daten zuruecksetzen
