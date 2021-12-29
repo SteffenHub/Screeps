@@ -1,6 +1,9 @@
 const { isEmpty } = require("lodash");
+var speicherVerwaltung = require('speicherVerwaltung');
 
 module.exports = function() {
+
+    var memoryName = "roadMemory";
 
     /**
      * Speichert einen Eintrag
@@ -9,14 +12,7 @@ module.exports = function() {
      * @param {*} wert Ordne dem einen Wert zu
      */
     ConstructionSite.prototype.speichere = function(name, wert){
-        if (Memory.roadMemory == undefined){
-            Memory.roadMemory = [];
-        }
-        if (this.getSpeicher() == undefined){
-            Memory.roadMemory.push({"id": this.id, [name]: wert});
-        }else{
-            this.speicherInExisitiertenSpeicher(name,wert);
-        }
+        speicherVerwaltung.speichere(this.memoryName, this.id, name, wert);
     };
 
     /**
@@ -24,15 +20,8 @@ module.exports = function() {
      * 
      * @returns Gibt den Gesamten Speicher fuer dieses Objekt aus, falls kein Speicher exisitiert -> undefined
      */
-     ConstructionSite.prototype.getSpeicher = function(){
-        if (Memory.roadMemory == undefined || isEmpty(Memory.roadMemory)){
-            return undefined;
-        }
-        var stelleImSpeicher = this.findeStelleImRoadSpeicher();
-        if(stelleImSpeicher >= 0){
-            return Memory.roadMemory[stelleImSpeicher];
-        }
-        return undefined;
+    ConstructionSite.prototype.getSpeicher = function(){
+        speicherVerwaltung.getSpeicher(this.memoryName, this.id);
     };
 
     /**
@@ -40,55 +29,15 @@ module.exports = function() {
      * 
      * @param {*} name Der Name des Eintrages
      */
-     ConstructionSite.prototype.loscheEintragImSpeicher = function(name){
-        if (name == "id"){
-            console.log("Du solltest die ID nicht loeschen");
-        }else{
-            var stelleImSpeicher = this.findeStelleImRoadSpeicher();
-            if (stelleImSpeicher >= 0){
-                Memory.roadMemory[stelleImSpeicher][[name]] = undefined;
-            }
-        }
+    ConstructionSite.prototype.loscheEintragImSpeicher = function(name){
+        speicherVerwaltung.loscheEintragImSpeicher(this.memoryName, this.id, name);
     };
 
     /**
      * Loescht den gesamten Speicher, der fuer dieses Objekt angelegt wurde
      */
-     ConstructionSite.prototype.loscheGanzenSpeicher = function(){
-        var stelleImSpeicher = this.findeStelleImRoadSpeicher();
-        if (stelleImSpeicher >= 0){
-            Memory.roadMemory.splice(stelleImSpeicher,1);
-        }
-    };
-
-
-
-
-
-
-    /**                         **\
-     *                           *
-     *                           *
-     *      PRIVATE METHODEN     *
-     *                           *
-     *                           *
-    \*                           */
-
-
-
-
-
-    /**
-     * Speichert einen Eintrag, wenn bereits ein Speicher fuer dieses Objekt angelegt wurde
-     * 
-     * @param {*} name Der Name, den der Eintrag haben soll(zum wiederfinden)
-     * @param {*} wert Ordne dem einen Wert zu
-     */
-        ConstructionSite.prototype.speicherInExisitiertenSpeicher = function(name,wert){
-        var stelleImSpeicher = this.findeStelleImRoadSpeicher();
-        if (stelleImSpeicher >= 0){
-            Memory.roadMemory[stelleImSpeicher][[name]] = wert;
-        }
+    ConstructionSite.prototype.loscheGanzenSpeicher = function(){
+        speicherVerwaltung.loscheGanzenSpeicher(this.memoryName, this.id);
     };
 
     /**
@@ -96,15 +45,7 @@ module.exports = function() {
      * 
      * @returns den Index, wenn nicht existiert -> -1
      */
-        ConstructionSite.prototype.findeStelleImRoadSpeicher = function(){
-        if (isEmpty(Memory.roadMemory)){
-            return -1;
-        }
-        for(i = 0; i < Memory.roadMemory.length; i++){
-            if (this.id == Memory.roadMemory[i].id){
-                return i;
-            }
-        }
-        return -1;
+    ConstructionSite.prototype.findeStelleImRoadSpeicher = function(){
+        return speicherVerwaltung.findeStelleImRoadSpeicher(this.memoryName, this.id);
     };
 };
