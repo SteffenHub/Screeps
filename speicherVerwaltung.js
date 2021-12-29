@@ -63,7 +63,7 @@ module.exports = {
         if (stelleImSpeicher >= 0){
             Memory[memoryName].splice(stelleImSpeicher,1);
             //Wenn speicher leer -> loesche ihn
-            if (isEmpty(Memory[memoryName])){
+            if (Memory[memoryName].length == 0){
                 Memory[memoryName] = undefined;
             }
         }
