@@ -156,8 +156,10 @@ module.exports = {
             }
         }
         if (isEmpty(Memory.roadMemoryTMP)){
-            Memory.roadMemoryTMP = undefined;
-            console.log("Es existieren derzeit "+ this.getAlleStrassenImRaum().length+" Strassen im Raum " + raum.name);
+            if (Memory.roadMemoryTMP != undefined){
+                Memory.roadMemoryTMP = undefined;
+                console.log("Es existieren derzeit "+ this.getAlleStrassenImRaum(raum).length+" Strassen im Raum " + raum.name);
+            }
         }
     }
 
