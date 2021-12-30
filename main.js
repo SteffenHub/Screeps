@@ -4,9 +4,8 @@ var roleBauerbeiter = require('role.Bauerbeiter');
 
 require('prototype.Spawn')();
 require('prototype.room.usageTracker')();
+require('prototype.room.raumKonstrukteur')();
 require('prototype.Tower')();
-
-var raumUsageTracker = require('raumUsageTracker');
 
 const { filter } = require('lodash');
 
@@ -16,6 +15,7 @@ module.exports.loop = function () {
     //Die Schritte der creeps tracken
     for (let name in Game.rooms){
         Game.rooms[name].trackUsage();
+        Game.rooms[name].baueStrassen();
     }
 
     //Tote Creeps loeschen
@@ -58,9 +58,4 @@ module.exports.loop = function () {
             tower.run();
         }
     }
-
-
-    raumUsageTracker.run();
-    raumUsageTracker.baueStrassen(creep.room);
-
 }
