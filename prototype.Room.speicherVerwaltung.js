@@ -1,4 +1,3 @@
-const { isEmpty } = require("lodash");
 var speicherVerwaltung = require('speicherVerwaltung');
 
 module.exports = function() {
@@ -48,6 +47,6 @@ module.exports = function() {
      * @returns Den angefragten Eintrag. undefined, falls nicht existiert
      */
     Room.prototype.getEintragAusSpeicher = function(nameEintrag){
-        return speicherVerwaltung.getEintragAusSpeicher(memoryName, this.id, nameEintrag);
+        return speicherVerwaltung.getEintragAusSpeicher(memoryName, this.name, nameEintrag);
     }
 };
