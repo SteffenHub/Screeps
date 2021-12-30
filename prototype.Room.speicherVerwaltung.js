@@ -41,11 +41,13 @@ module.exports = function() {
     };
 
     /**
-     * findet den Index, an dem der Objekt Speicher in der Memory liegt
+     * Sucht im Speicher nach dem gegeben Eintrag und gibt diesen aus(else undefined)
      * 
-     * @returns den Index, wenn nicht existiert -> -1
+     * @param {*} nameEintrag Der Name vom Eintrag, der ausgelesen werden soll 
+     * 
+     * @returns Den angefragten Eintrag. undefined, falls nicht existiert
      */
-    Room.prototype.findeStelleImRoadSpeicher = function(){
-        return speicherVerwaltung.findeStelleImRoadSpeicher(memoryName, this.name);
-    };
+    Room.prototype.getEintragAusSpeicher = function(nameEintrag){
+        return speicherVerwaltung.getEintragAusSpeicher(memoryName, this.id, nameEintrag);
+    }
 };

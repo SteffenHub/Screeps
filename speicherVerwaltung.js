@@ -24,6 +24,7 @@ module.exports = {
      * 
      * @param {*} memoryName Der Name, den der Speicher in der Memory hat(Objekttyp spezifisch)
      * @param {*} objektID Eine ID, mit der das Objekt eindeutig bestimmbar ist
+     * 
      * @returns Gibt den Gesamten Speicher fuer dieses Objekt aus, falls kein Speicher exisitiert -> undefined
      */
     ,getSpeicher: function(memoryName, objektID){
@@ -69,6 +70,23 @@ module.exports = {
         }
     }
 
+    /**
+     * Sucht im Speicher nach dem gegeben Eintrag und gibt diesen aus(else undefined)
+     * 
+     * @param {*} memoryName Der Name, den der Speicher in der Memory hat(Objekttyp spezifisch)
+     * @param {*} objektID Eine ID, mit der das Objekt eindeutig bestimmbar ist
+     * @param {*} eintragName Der Name vom Eintrag, der ausgelesen werden soll
+     * 
+     * @returns Den angefragten Eintrag. undefined, falls nicht existiert
+     */
+    ,getEintragAusSpeicher: function(memoryName, objektID, eintragName){
+        var speicher = this.getSpeicher(memoryName, objektID);
+        if (speicher != undefined){
+            return speicher[eintragName];
+        }
+        return undefined;
+    }
+
 
 
 
@@ -106,6 +124,7 @@ module.exports = {
      * 
      * @param {*} memoryName Der Name, den der Speicher in der Memory hat(Objekttyp spezifisch)
      * @param {*} objektID Eine ID, mit der das Objekt eindeutig bestimmbar ist
+     * 
      * @returns den Index, wenn nicht existiert -> -1
      */
     ,findeStelleImRoadSpeicher: function(memoryName, objektID){
