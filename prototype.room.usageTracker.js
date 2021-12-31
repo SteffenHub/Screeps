@@ -4,7 +4,7 @@ module.exports = function(){
     Room.prototype.trackUsage = function(){
 
         //Nur das erste mal -> initalisieren
-        if (this.getSpeicher() == undefined || this.getSpeicher().usage == undefined){
+        if (this.getSpeicher() === undefined || this.getEintragAusSpeicher("usage") === undefined){
             this.speichere("usage", new Array(49).fill(new Array(49).fill(0)));
             this.speichere("ticksSeitStrassenUpdate", 0);
             //Diesen Tick nichts mehr machen, sonst raumUsage ist noch undefined
@@ -15,22 +15,22 @@ module.exports = function(){
         for (let name in Game.creeps){
             var creep = Game.creeps[name];
             //Nur das erste mal
-            if (creep.memory.letztePos == undefined){
+            if (creep.memory.letztePos === undefined){
                 creep.memory.letztePos = creep.pos;
                 continue;
             }
             //Wenn der creep sich bewegt hat
-            if(creep.memory.letztePos.x != creep.pos.x || creep.memory.letztePos.y != creep.pos.y){
+            if(creep.memory.letztePos.x !== creep.pos.x || creep.memory.letztePos.y !== creep.pos.y){
                 creep.memory.letztePos = creep.pos;
-                ++this.getSpeicher().usage[creep.pos.x][creep.pos.y];
+                ++this.getEintragAusSpeicher("usage")[creep.pos.x][creep.pos.y];
             }
         }
 
         //ticks erhoehen 
-        ++this.getSpeicher().ticksSeitStrassenUpdate;
+        this.speichere("ticksSeitStrassenUpdate", this.getEintragAusSpeicher("ticksSeitStrassenUpdate") + 1);
 
         //getrackte Daten zuruecksetzen
-        if (this.getSpeicher().ticksSeitStrassenUpdate > 4500){
+        if (this.getEintragAusSpeicher("ticksSeitStrassenUpdate") > 4500){
             this.loscheEintragImSpeicher("usage");
             this.loscheEintragImSpeicher("ticksSeitStrassenUpdate");
         }
