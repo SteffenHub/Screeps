@@ -4,7 +4,7 @@ require('prototype.constructionSite.road.speicherVerwaltung')();
 
 module.exports = function(){
 
-    var anzahlStrassen = 5;
+    var anzahlStrassen = 80;
     var ticksZumUpdate = 600;
 
     /**
@@ -17,7 +17,7 @@ module.exports = function(){
         this.fuegeEbenErstellteStrassenInMemoryEin(); 
 
         //Erst Nach 600 ticks strassen infrastruktur aktualisieren
-        if (this.getSpeicher().ticksSeitStrassenUpdate%ticksZumUpdate != 0){
+        if (this.getSpeicher().ticksSeitStrassenUpdate%ticksZumUpdate !== 0){
             return;
         }
 
@@ -49,7 +49,7 @@ module.exports = function(){
         //zerstoere Strassen, die wir nicht mehr brauchen
         for (let i = 0; i < alleStrassenImRaum.length; i++){
             var istAutomatischGebaut = Game.getObjectById(alleStrassenImRaum[i].id).getEintragAusSpeicher("istAutomatischGebaut");
-            if (istAutomatischGebaut != undefined && istAutomatischGebaut){
+            if (istAutomatischGebaut !== undefined && istAutomatischGebaut){
                 this.strasseLoeschen(alleStrassenImRaum[i]);
             }
         }
@@ -62,12 +62,12 @@ module.exports = function(){
      */
     Room.prototype.fuegeEbenErstellteStrassenInMemoryEin = function(){
         //Wenn im letzten Tick strassen gebaut wurden
-        if (Memory.roadMemoryTMP != undefined){
+        if (Memory.roadMemoryTMP !== undefined){
             var geradeErstellteStrassen = Memory.roadMemoryTMP;
             for (let i = 0; i < geradeErstellteStrassen.length; i++){
                 var dieseStrasse = geradeErstellteStrassen[i];
                 var strasse = this.strasseFindenByPos(dieseStrasse.x,dieseStrasse.y);
-                if (strasse != undefined){
+                if (strasse !== undefined){
                     //speicher, dass diese Strasse automatisch gebaut wurde
                     Game.getObjectById(strasse.id).speichere("istAutomatischGebaut",true);
                     Memory.roadMemoryTMP.splice(i,1);
@@ -75,11 +75,9 @@ module.exports = function(){
                 }
             }
             //Wenn die Liste dannach leer ist dann loesche die Liste
-            if (Memory.roadMemoryTMP.length == 0){
-                if (Memory.roadMemoryTMP != undefined){
-                    Memory.roadMemoryTMP = undefined;
-                    console.log("Es existieren derzeit "+ this.getAlleStrassenImRaum().length+" Strassen im Raum " + this.name);
-                }
+            if (Memory.roadMemoryTMP.length === 0){
+                Memory.roadMemoryTMP = undefined;
+                console.log("Es existieren derzeit "+ this.getAlleStrassenImRaum().length+" Strassen im Raum " + this.name);
             }
         }
     }
@@ -91,7 +89,7 @@ module.exports = function(){
      */
     Room.prototype.strasseLoeschen = function(strasse){
         Game.getObjectById(strasse.id).loscheGanzenSpeicher();
-        if (strasse.progress != undefined){
+        if (strasse.progress !== undefined){
             Game.getObjectById(strasse.id).remove();
         }else{
             Game.getObjectById(strasse.id).destroy();
@@ -107,16 +105,16 @@ module.exports = function(){
      * @returns die Strasse, die sich hier befindet oder undefined wenn es dort keine gibt
      */
     Room.prototype.strasseFindenByPos = function(x,y){
-        var b = this.find(FIND_CONSTRUCTION_SITES, {filter: (s) => s.structureType == STRUCTURE_ROAD && s.pos.x == x && s.pos.y == y});
-        if (b.length != 0 || b != undefined){
-            if (b[0] != undefined){
+        var b = this.find(FIND_CONSTRUCTION_SITES, {filter: (s) => s.structureType === STRUCTURE_ROAD && s.pos.x === x && s.pos.y === y});
+        if (b !== undefined && b.length !== 0){
+            if (b[0] !== undefined){
                 b = b[0];
             }
             return b;
         }
-        var a = this.find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_ROAD && s.pos.x == x && s.pos.y == y});
-        if (a != undefined){
-            if (a.length != 0 || a[0] != undefined){
+        var a = this.find(FIND_STRUCTURES, {filter: (s) => s.structureType === STRUCTURE_ROAD && s.pos.x === x && s.pos.y === y});
+        if (a !== undefined && a.length !== 0){
+            if (a[0] !== undefined){
                 a = a[0];
             }
             return a;
@@ -134,7 +132,7 @@ module.exports = function(){
     Room.prototype.baueStrasse = function(x,y){
         //Wenn strasse gebaut werden kann
         if(this.createConstructionSite(x, y, STRUCTURE_ROAD) >= 0){
-            if (Memory.roadMemoryTMP == undefined){
+            if (Memory.roadMemoryTMP === undefined){
                 Memory.roadMemoryTMP = [];
             }
             Memory.roadMemoryTMP.push({x:[x], y:[y]});
@@ -153,7 +151,7 @@ module.exports = function(){
         //delNutz.sort((a, b) => a[0]-b[0]);
         for(let x = 0; x < delEintraege.length; x++){
             for(let i = 0; i < liste.length; i++){
-                if(delEintraege[x].pos.x == liste[i].pos.x && delEintraege[x].pos.y == liste[i].pos.y){
+                if(delEintraege[x].pos.x === liste[i].pos.x && delEintraege[x].pos.y === liste[i].pos.y){
                     liste.splice(i,1);
                     --i;
                 }
@@ -175,7 +173,7 @@ module.exports = function(){
             var nutzungEintrag = nutzung[i];
             for(let x = 0; x < alleStrassenImRaum.length; x++){
                 var alleStrassenEintrag = alleStrassenImRaum[x];
-                if(nutzungEintrag.pos.x == alleStrassenEintrag.pos.x && nutzungEintrag.pos.y == alleStrassenEintrag.pos.y){
+                if(nutzungEintrag.pos.x === alleStrassenEintrag.pos.x && nutzungEintrag.pos.y === alleStrassenEintrag.pos.y){
                     delNutz.push(nutzungEintrag);
                     delAlleS.push(alleStrassenEintrag);
                 }
@@ -206,8 +204,8 @@ module.exports = function(){
      * Gibt eine Liste aller fertigen Strassen und nicht fertigen strassen aus
      */
     Room.prototype.getAlleStrassenImRaum = function(){
-        var nichtFertigeStrassen = this.find(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType == STRUCTURE_ROAD}});
-        var fertigeStrassen = this.find(FIND_STRUCTURES, { filter: (s) => {return s.structureType == STRUCTURE_ROAD}});
+        var nichtFertigeStrassen = this.find(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType === STRUCTURE_ROAD}});
+        var fertigeStrassen = this.find(FIND_STRUCTURES, { filter: (s) => {return s.structureType === STRUCTURE_ROAD}});
         return nichtFertigeStrassen.concat(fertigeStrassen);
     }
 };
