@@ -18,6 +18,10 @@ module.exports = function(){
                 creep.memory.letztePos = creep.pos;
                 continue;
             }
+            //Wenn dieser creep nicht in diesem Raum ist
+            if(creep.room.name != this.name){
+                continue;
+            }
             //Wenn der creep sich bewegt hat
             if(creep.memory.letztePos.x !== creep.pos.x || creep.memory.letztePos.y !== creep.pos.y){
                 creep.memory.letztePos = creep.pos;
@@ -33,5 +37,24 @@ module.exports = function(){
             this.loscheEintragImSpeicher("usage");
             this.loscheEintragImSpeicher("ticksSeitStrassenUpdate");
         }
+    }
+
+    /**
+     * Gibt eine Liste aus, in der steht wie oft creeps ueber einen Ort im Raum gegangen sind.(ORTE 0 & 49 NICHT MIT DRIN)
+     * Der erste Eintrag ist dabei der am meisten besuchte Ort
+     * Struktur: Liste aus Objekten mit variablen: {hauefigkeit,pos:{x,y}}
+     */
+    Room.prototype.getUsageSortierteListe = function(){
+        var sortList = [];
+        for (let x = 1; x < this.getSpeicher().usage.length-1; x++){
+            for (let y = 1; y < this.getSpeicher().usage[x].length-1; y++){
+                var value = this.getSpeicher().usage[x][y];
+                if (value > 0){
+                    sortList.push({hauefigkeit:value, pos: {x:x, y:y}});
+                }
+            }
+        }
+        sortList.sort((a, b) => -a.hauefigkeit+b.hauefigkeit);
+        return sortList;
     }
 };

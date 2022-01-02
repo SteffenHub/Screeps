@@ -1,6 +1,7 @@
 require('prototype.Room.speicherVerwaltung')();
 require('prototype.road.SpeicherVerwaltung')();
 require('prototype.constructionSite.road.speicherVerwaltung')();
+require('prototype.room.usageTracker')();
 
 module.exports = function(){
 
@@ -17,12 +18,12 @@ module.exports = function(){
         this.fuegeEbenErstellteStrassenInMemoryEin();
 
         //Erst Nach 600 ticks strassen infrastruktur aktualisieren
-        if (this.getSpeicher().ticksSeitStrassenUpdate%ticksZumUpdate != 0){
+        if (this.getEintragAusSpeicher("ticksSeitStrassenUpdate")%ticksZumUpdate != 0){
             return;
         }
 
         //Liste von genutzten orten im Raum mit hauefigkeit
-        var nutzung = this.getSortierteListe();
+        var nutzung = this.getUsageSortierteListe();
         //Liste aller fertigen strassen und nicht fertigen strassen im raum
         var alleStrassenImRaum = this.getAlleStrassenImRaum();
         
@@ -180,24 +181,6 @@ module.exports = function(){
             }
         }
         return {delNutzung: delNutz, delAlleStrassenImRaum: delAlleS};
-    }
-
-    /**
-     * Gibt eine Liste aus, in der steht wie oft creeps ueber einen Ort im Raum gegangen sind
-     * Struktur: Liste aus Objekten mit variablen: {hauefigkeit,pos:{x,y}}
-     */
-    Room.prototype.getSortierteListe = function(){
-        var sortList = [];
-        for (let x = 0; x < this.getSpeicher().usage.length; x++){
-            for (let y = 0; y < this.getSpeicher().usage[x].length; y++){
-                var value = this.getSpeicher().usage[x][y];
-                if (value > 0){
-                    sortList.push({hauefigkeit:value, pos: {x:x, y:y}});
-                }
-            }
-        }
-        sortList.sort((a, b) => -a.hauefigkeit+b.hauefigkeit);
-        return sortList;
     }
 
     /**
