@@ -9,6 +9,14 @@ module.exports = function() {
     };
 
     /**
+     * Wenn Energie voll ist wird ein Distanz Sammler gespawnt
+     */
+    StructureSpawn.prototype.spawnDistanzSammler = function(){
+        var argumente = {role:'distanzSammler', arbeitet: false};
+        this.spawnCreep(this.getBalancedKonfiguration(),argumente);
+    };
+
+    /**
      * Wenn Energie voll ist wird ein Upgrader gespawnt
      */
     StructureSpawn.prototype.spawnUpgrader = function(){

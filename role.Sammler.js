@@ -1,7 +1,4 @@
-
-const { drop } = require('lodash');
 require('prototype.creep')();
-
 
 module.exports = {
     run: function(creep){

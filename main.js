@@ -1,4 +1,5 @@
 var roleSammler = require('role.Sammler');
+var roleDistanzSammler = require('role.distanzSammler');
 var roleUpgrader = require('role.Upgrader');
 var roleBauerbeiter = require('role.Bauerbeiter');
 
@@ -32,6 +33,8 @@ module.exports.loop = function () {
 
         if(creep.memory.role == 'Sammler'){
             roleSammler.run(creep);
+        }else if (creep.memory.role == 'distanzSammler') {
+            roleDistanzSammler.run(creep);
         }else if(creep.memory.role == 'Upgrader'){
             roleUpgrader.run(creep);
         }else if(creep.memory.role == 'Bauerbeiter'){
@@ -40,8 +43,10 @@ module.exports.loop = function () {
     }
 
     //Wenn nicht genug Sammler -> Sammler herstellen
-    if (_.sum(Game.creeps, (c) => c.memory.role == 'Sammler') < 4){
+    if (_.sum(Game.creeps, (c) => c.memory.role == 'Sammler') < 2) {
         Game.spawns.Spawn1.spawnSammler();
+    }else if(_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler') < 2){
+        Game.spawns.Spawn1.spawnDistanzSammler();
     //Wenn nicht genug Upgrader -> Upgrader herstellen   
     }else if(_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader') < 1){
         Game.spawns.Spawn1.spawnUpgrader();
