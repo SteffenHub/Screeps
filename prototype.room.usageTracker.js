@@ -5,12 +5,11 @@ module.exports = function(){
 
         //Nur das erste mal -> initalisieren
         if (this.getSpeicher() === undefined || this.getEintragAusSpeicher("usage") === undefined){
-            this.speichere("usage", new Array(49).fill(new Array(49).fill(0)));
+            this.speichere("usage", new Array(50).fill(new Array(50).fill(0)));
             this.speichere("ticksSeitStrassenUpdate", 0);
             //Diesen Tick nichts mehr machen, sonst raumUsage ist noch undefined
             return;
         }
-
         //Bei allen Creeps schauen, ob sie sich bewegt haben
         for (let name in Game.creeps){
             var creep = Game.creeps[name];
