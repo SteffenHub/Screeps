@@ -32,6 +32,14 @@ module.exports = function() {
         this.spawnCreep(this.getBalancedKonfiguration(),argumente);
     };
 
+    /**
+     * Wenn Energie voll ist wird ein mauer reparierer gespawnt
+     */
+    StructureSpawn.prototype.spawnMauerReparierer = function(){
+        var argumente = {role:'mauerReparierer', arbeitet: false};
+        this.spawnCreep(this.getBalancedKonfiguration(),argumente);
+    };
+
 
 
 
