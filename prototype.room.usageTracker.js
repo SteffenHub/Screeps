@@ -1,4 +1,5 @@
 require('prototype.Room.speicherVerwaltung')();
+require('prototype.road.SpeicherVerwaltung')();
 module.exports = function(){
 
     Room.prototype.trackUsage = function(){
@@ -56,5 +57,36 @@ module.exports = function(){
         }
         sortList.sort((a, b) => -a.hauefigkeit+b.hauefigkeit);
         return sortList;
+    }
+
+    /**
+     * Gibt eine Liste aus, in der steht wie oft creeps ueber einen Ort im Raum gegangen sind.(ORTE 0 & 49 NICHT MIT DRIN)
+     * Die Orte, an dennen eine Strasse steht, die manuell gebaut wurde ist in dieser Liste geloscht.
+     * Der erste Eintrag ist dabei der am meisten besuchte Ort
+     * Struktur: Liste aus Objekten mit variablen: {hauefigkeit,pos:{x,y}}
+     */
+    Room.prototype.getUsageSortierteListeOhneManuellGebauteStrassen = function(){
+        var sortList = this.getUsageSortierteListe();
+
+        var alleStrassenImRaum = this.getAlleStrassenImRaum();
+        for (let i = 0; i < alleStrassenImRaum.length; i++) {
+            for (let j = 0; j < sortList.length; j++) {
+                var isAutomatisch = Game.getObjectById(alleStrassenImRaum[i].id).getEintragAusSpeicher("istAutomatischGebaut");
+                if ((isAutomatisch == undefined|| !isAutomatisch) && Game.getObjectById(alleStrassenImRaum[i].id).pos.x == sortList[j].pos.x && Game.getObjectById(alleStrassenImRaum[i].id).pos.y == sortList[j].pos.y){
+                    sortList.splice(j,1);
+                    --j;
+                }
+            }
+        }
+        return sortList;
+    }
+
+    /**
+     * Gibt eine Liste aller fertigen Strassen und nicht fertigen strassen aus
+     */
+    Room.prototype.getAlleStrassenImRaum = function(){
+        var nichtFertigeStrassen = this.find(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType == STRUCTURE_ROAD}});
+        var fertigeStrassen = this.find(FIND_STRUCTURES, { filter: (s) => {return s.structureType == STRUCTURE_ROAD}});
+        return nichtFertigeStrassen.concat(fertigeStrassen);
     }
 };
