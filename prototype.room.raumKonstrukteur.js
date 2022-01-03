@@ -5,8 +5,9 @@ require('prototype.room.usageTracker')();
 
 module.exports = function(){
 
-    var anzahlStrassen = 80;
+    var anzahlStrassen = 65;
     var ticksZumUpdate = 600;
+    var printAnzahlStrassen = false;
 
     /**
      * Kuemmert sich darum, dass in dem Raum Strassen gebaut werden, die anhand der Benutzung berechnet werden
@@ -14,6 +15,10 @@ module.exports = function(){
      * Strassen, die mauell gebaut wurden werden nicht zerstoert
      */
     Room.prototype.baueStrassen = function(){
+        if (printAnzahlStrassen) {
+            console.log("Es existieren derzeit " + this.getAlleStrassenImRaum().length + " Strassen im Raum " + this.name);
+            printAnzahlStrassen = false;
+        }
 
         this.fuegeEbenErstellteStrassenInMemoryEin();
 
@@ -23,16 +28,16 @@ module.exports = function(){
         }
 
         //Liste von genutzten orten im Raum mit hauefigkeit
-        var nutzung = this.getUsageSortierteListe();
+        var nutzung = this.getUsageSortierteListeOhneManuellGebauteStrassen();
         //Liste aller fertigen strassen und nicht fertigen strassen im raum
         var alleStrassenImRaum = this.getAlleStrassenImRaum();
-        
-        //Wenn weniger als $anzahlStrassen strassen benutzt wurden
-        if (nutzung.length <= anzahlStrassen){
-            anzahlStrassen = nutzung.length;
-        }else{
+
+        var anzahlStrassentmp = this.getAnzahlZuBauendeStrassen(alleStrassenImRaum);
+
+        //Wenn mehr als $anzahlStrassentmp strassen benutzt wurden
+        if (nutzung.length > anzahlStrassentmp){
             //nutzung verkleinern, sonst haben wir falsche werte und mehr als $anzahlStrassen strassen
-            nutzung = nutzung.splice(0, anzahlStrassen);
+            nutzung = nutzung.splice(0, anzahlStrassentmp);
         }
 
         //Hole alle uberschneidungen aus beiden listen und loesche sie
@@ -55,6 +60,20 @@ module.exports = function(){
             }
         }
         console.log("Strassen im Raum " + this.name + " wurden aktuallisiert");
+        printAnzahlStrassen = true;
+    }
+
+    Room.prototype.getAnzahlZuBauendeStrassen = function(alleStrassenImRaum){
+        var zuBauendeStrassen = anzahlStrassen;
+        var anzahlAutoGebauteStrassen = 0;
+        if (Memory.roadMemory != undefined) {
+            anzahlAutoGebauteStrassen = Memory.roadMemory.length;
+        }
+        zuBauendeStrassen = zuBauendeStrassen - (alleStrassenImRaum.length - anzahlAutoGebauteStrassen);
+        if (zuBauendeStrassen < 0) {
+            zuBauendeStrassen = 0;
+        }
+        return zuBauendeStrassen;
     }
 
     /**
@@ -78,7 +97,6 @@ module.exports = function(){
             //Wenn die Liste dannach leer ist dann loesche die Liste
             if (Memory.roadMemoryTMP.length == 0){
                 Memory.roadMemoryTMP = undefined;
-                console.log("Es existieren derzeit "+ this.getAlleStrassenImRaum().length+" Strassen im Raum " + this.name);
             }
         }
     }
@@ -89,11 +107,18 @@ module.exports = function(){
      * @param {*} strasse die Strasse, die geloscht werden soll
      */
     Room.prototype.strasseLoeschen = function(strasse){
-        Game.getObjectById(strasse.id).loscheGanzenSpeicher();
         if (strasse.progress != undefined){
-            Game.getObjectById(strasse.id).remove();
+            if (Game.getObjectById(strasse.id).remove() < 0){
+                console.log("Strasse konnte nicht removed werden: " + "x="+strasse.pos.x +" y="+strasse.pos.y);
+            }else{
+                Game.getObjectById(strasse.id).loscheGanzenSpeicher();
+            }
         }else{
-            Game.getObjectById(strasse.id).destroy();
+            if(Game.getObjectById(strasse.id).destroy()<0) {
+                console.log("Strasse konnte nicht zerstoert werden: " + "x=" + strasse.pos.x + " y=" + strasse.pos.y);
+            }else{
+                Game.getObjectById(strasse.id).loscheGanzenSpeicher();
+            }
         }
     }
 
@@ -181,14 +206,5 @@ module.exports = function(){
             }
         }
         return {delNutzung: delNutz, delAlleStrassenImRaum: delAlleS};
-    }
-
-    /**
-     * Gibt eine Liste aller fertigen Strassen und nicht fertigen strassen aus
-     */
-    Room.prototype.getAlleStrassenImRaum = function(){
-        var nichtFertigeStrassen = this.find(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType == STRUCTURE_ROAD}});
-        var fertigeStrassen = this.find(FIND_STRUCTURES, { filter: (s) => {return s.structureType == STRUCTURE_ROAD}});
-        return nichtFertigeStrassen.concat(fertigeStrassen);
     }
 };
