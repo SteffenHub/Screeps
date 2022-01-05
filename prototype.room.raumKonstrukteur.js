@@ -5,9 +5,8 @@ require('prototype.room.usageTracker')();
 
 module.exports = function(){
 
-    var anzahlStrassen = 65;
-    var ticksZumUpdate = 600;
-    var printAnzahlStrassen = false;
+    var anzahlStrassen = 80;
+    var ticksZumUpdate = 1000;
 
     /**
      * Kuemmert sich darum, dass in dem Raum Strassen gebaut werden, die anhand der Benutzung berechnet werden
@@ -15,9 +14,29 @@ module.exports = function(){
      * Strassen, die mauell gebaut wurden werden nicht zerstoert
      */
     Room.prototype.baueStrassen = function(){
-        if (printAnzahlStrassen) {
-            console.log("Es existieren derzeit " + this.getAlleStrassenImRaum().length + " Strassen im Raum " + this.name);
-            printAnzahlStrassen = false;
+
+        /*
+        //Fuer neu initialisieren vom roadMemory
+        var strassenAlle = this.getAlleStrassenImRaum();
+        for (let i = 0; i < strassenAlle.length; i++) {
+            if (!(strassenAlle[i].pos.x == 10 && strassenAlle[i].pos.y == 30)
+                && !(strassenAlle[i].pos.x == 12 && strassenAlle[i].pos.y == 31)
+                && !(strassenAlle[i].pos.x == 10 && strassenAlle[i].pos.y == 39)
+                && !(strassenAlle[i].pos.x == 4 && strassenAlle[i].pos.y == 42)
+                && !(strassenAlle[i].pos.x == 3 && strassenAlle[i].pos.y == 43)){
+                Game.getObjectById(strassenAlle[i].id).speichere("istAutomatischGebaut",true);
+            }
+        }
+         */
+
+        //Print anzahlStrassen wenn noetig
+        if (this.getEintragAusSpeicher("printAnzahlStrassen") == undefined){
+            this.speichere("printAnzahlStrassen", false);
+        }else {
+            if (this.getEintragAusSpeicher("printAnzahlStrassen")) {
+                console.log("Es existieren derzeit " + this.getAlleStrassenImRaum().length + " Strassen im Raum " + this.name);
+                this.speichere("printAnzahlStrassen", false);
+            }
         }
 
         this.fuegeEbenErstellteStrassenInMemoryEin();
@@ -60,7 +79,7 @@ module.exports = function(){
             }
         }
         console.log("Strassen im Raum " + this.name + " wurden aktuallisiert");
-        printAnzahlStrassen = true;
+        this.speichere("printAnzahlStrassen", true);
     }
 
     Room.prototype.getAnzahlZuBauendeStrassen = function(alleStrassenImRaum){
@@ -157,13 +176,14 @@ module.exports = function(){
      */
     Room.prototype.baueStrasse = function(x,y){
         //Wenn strasse gebaut werden kann
-        if(this.createConstructionSite(x, y, STRUCTURE_ROAD) >= 0){
+        var errorCode = this.createConstructionSite(x, y, STRUCTURE_ROAD);
+        if(errorCode >= 0){
             if (Memory.roadMemoryTMP == undefined){
                 Memory.roadMemoryTMP = [];
             }
             Memory.roadMemoryTMP.push({x:[x], y:[y]});
         }else{
-            console.log("Strasse konnte nicht gebaut werden: x="+x+" y="+y)
+            console.log("Strasse konnte nicht gebaut werden: x="+x+" y="+y +" ErrorCode: " + errorCode);
         }
     }
 
