@@ -39,6 +39,16 @@ module.exports = function(){
             }
         }
 
+        //manuell geloeschte Strassen updaten und mit roadMemory abgleichen
+        if (this.getEintragAusSpeicher("ticksSeitStrassenUpdate")%20 == 0 || this.getEintragAusSpeicher("ticksSeitStrassenUpdate")%(ticksZumUpdate-1) != 0){
+            for (let i = 0; i < Memory.roadMemory.length; i++) {
+                if (Game.getObjectById(Memory.roadMemory[i].id) == undefined){
+                    Memory.roadMemory.splice(i,1);
+                    --i;
+                }
+            }
+        }
+
         this.fuegeEbenErstellteStrassenInMemoryEin();
 
         //Erst Nach 600 ticks strassen infrastruktur aktualisieren
