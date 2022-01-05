@@ -5,7 +5,7 @@ require('prototype.room.usageTracker')();
 
 module.exports = function(){
 
-    var anzahlStrassen = 80;
+    var anzahlStrassen = 60;
     var ticksZumUpdate = 1000;
 
     /**
@@ -41,10 +41,13 @@ module.exports = function(){
 
         //manuell geloeschte Strassen updaten und mit roadMemory abgleichen
         if (this.getEintragAusSpeicher("ticksSeitStrassenUpdate")%20 == 0 || this.getEintragAusSpeicher("ticksSeitStrassenUpdate")%(ticksZumUpdate-1) != 0){
-            for (let i = 0; i < Memory.roadMemory.length; i++) {
-                if (Game.getObjectById(Memory.roadMemory[i].id) == undefined){
-                    Memory.roadMemory.splice(i,1);
-                    --i;
+            var roadMemory = Memory.roadMemory;
+            if (roadMemory != undefined) {
+                for (let i = 0; i < roadMemory.length; i++) {
+                    if (Game.getObjectById(roadMemory[i].id) == undefined) {
+                        Memory.roadMemory.splice(i, 1);
+                        --i;
+                    }
                 }
             }
         }
