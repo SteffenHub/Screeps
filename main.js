@@ -42,17 +42,47 @@ module.exports.loop = function () {
         }
     }
 
+    var anzahlSammler = _.sum(Game.creeps, (c) => c.memory.role == 'Sammler');
     //Wenn nicht genug Sammler -> Sammler herstellen
-    if (_.sum(Game.creeps, (c) => c.memory.role == 'Sammler') < 2) {
-        Game.spawns.Spawn1.spawnSammler();
+    if (anzahlSammler < 1) {
+        if (anzahlSammler == 0){
+            //Wenn es gar keine Creeps mehr gibt
+            if (_.isEmpty(Game.creeps)){
+                Game.spawns.Spawn1.spawnCreep([WORK,CARRY,MOVE], {"role": "Sammler"});
+            }else{
+                var role = "";
+                if (_.sum(Game.creeps, (c) => c.memory.role == 'mauerReparierer') > 0){
+                    role = "mauerReparierer";
+                }else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter') > 0){
+                    role = "Bauerbeiter";
+                }else if (_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader') > 0){
+                    role = "Upgrader";
+                }
+                if (role != "") {
+                    for (let i = 0; i < Object.keys(Game.creeps).length; i++) {
+                        if (Game.creeps[Object.keys(Game.creeps)[i]].memory.role == role){
+                            Game.creeps[Object.keys(Game.creeps)[i]].memory.role = "Sammler";
+                            break;
+                        }
+                    }
+                }else{
+                    var randNummer = Math.floor(Math.random() * Object.keys(Game.creeps).length );
+                    Game.creeps[Object.keys(Game.creeps)[randNummer]].memory.role = "Sammler";
+                }
+            }
+        }else {
+            Game.spawns.Spawn1.spawnSammler();
+        }
     }else if(_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler') < 2){
         Game.spawns.Spawn1.spawnDistanzSammler();
     //Wenn nicht genug Upgrader -> Upgrader herstellen   
     }else if(_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader') < 2){
         Game.spawns.Spawn1.spawnUpgrader();
-    //Default    
+    }else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter') < 1){
+        Game.spawns.Spawn1.spawnBauerbeiter();
     }else if (_.sum(Game.creeps, (c) => c.memory.role == 'mauerReparierer') < 1){
         Game.spawns.Spawn1.spawnMauerReparierer();
+    //Default
     }else{
         Game.spawns.Spawn1.spawnBauerbeiter();
     }
