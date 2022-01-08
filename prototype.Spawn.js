@@ -5,7 +5,7 @@ module.exports = function() {
      */
     StructureSpawn.prototype.spawnSammler = function(){
         var argumente = {role:'Sammler', arbeitet: false};
-        this.spawnCreep(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
     /**
@@ -13,7 +13,7 @@ module.exports = function() {
      */
     StructureSpawn.prototype.spawnDistanzSammler = function(){
         var argumente = {role:'distanzSammler', arbeitet: false};
-        this.spawnCreep(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
     /**
@@ -21,7 +21,7 @@ module.exports = function() {
      */
     StructureSpawn.prototype.spawnUpgrader = function(){
         var argumente = {role:'Upgrader', arbeitet: false};
-        this.spawnCreep(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
     /**
@@ -29,7 +29,7 @@ module.exports = function() {
      */
     StructureSpawn.prototype.spawnBauerbeiter = function(){
         var argumente = {role:'Bauerbeiter', arbeitet: false};
-        this.spawnCreep(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
     /**
@@ -37,10 +37,16 @@ module.exports = function() {
      */
     StructureSpawn.prototype.spawnMauerReparierer = function(){
         var argumente = {role:'mauerReparierer', arbeitet: false};
-        this.spawnCreep(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
-
+    /**
+     * Wenn genug Energie da ist wird ein Claimer gespawnt
+     */
+    StructureSpawn.prototype.spawnClaimer = function(){
+        var argumente = {role:'Claimer'};
+        this.creepErstellen([CLAIM,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE],argumente);
+    };
 
 
 
@@ -65,7 +71,7 @@ module.exports = function() {
      * @param {*} konfiguration die Konfiguration, wie der Creep aufgebaut werden soll
      * @param {*} argumente die Argumente, die der Creep in seinem Speicher tragen soll
      */
-    StructureSpawn.prototype.spawnCreep = function(konfiguration,argumente){
+    StructureSpawn.prototype.creepErstellen = function(konfiguration, argumente){
         this.createCreep(konfiguration, undefined, argumente);
     };
 
