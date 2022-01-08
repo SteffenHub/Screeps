@@ -11,8 +11,8 @@ module.exports = function() {
     /**
      * Wenn Energie voll ist wird ein Distanz Sammler gespawnt
      */
-    StructureSpawn.prototype.spawnDistanzSammler = function(){
-        var argumente = {role:'distanzSammler', arbeitet: false};
+    StructureSpawn.prototype.spawnDistanzSammler = function(zielRaum){
+        var argumente = {role:'distanzSammler', 'arbeitet': false, 'hauptRaum': this.room.name, 'zielRaum': zielRaum};
         this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
@@ -43,9 +43,9 @@ module.exports = function() {
     /**
      * Wenn genug Energie da ist wird ein Claimer gespawnt
      */
-    StructureSpawn.prototype.spawnClaimer = function(){
-        var argumente = {role:'Claimer'};
-        this.creepErstellen([CLAIM,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE],argumente);
+    StructureSpawn.prototype.spawnClaimer = function(zielRaum){
+        var argumente = {role: 'Claimer', 'zielRaum': zielRaum};
+        this.creepErstellen([WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CLAIM,MOVE],argumente);
     };
 
 
@@ -87,8 +87,12 @@ module.exports = function() {
         var lauf = 1;
         while (raumEnergie > 0){
             if (lauf == 1){
-                konfigurationTmp.push(0);
                 raumEnergie -= 100;
+                if (raumEnergie < 0){
+                    raumEnergie += 100;
+                }else {
+                    konfigurationTmp.push(0);
+                }
             }else if (lauf == 2){
                 konfigurationTmp.push(1);
                 raumEnergie -= 50;

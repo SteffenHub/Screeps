@@ -6,8 +6,8 @@ module.exports = {
 
         //Wenn der Creep Energie dabei hat
         if (creep.arbeitet()){
-            if (creep.room.name != "E9N21") {
-                creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo("E9N21")));
+            if (creep.room.name != creep.memory.zielRaum) {
+                creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.zielRaum)));
             } else {
                 if (creep.room.controller.owner != undefined){
                     roleBauerbeiter.run(creep);
