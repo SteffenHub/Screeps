@@ -10,9 +10,8 @@ module.exports = {
             if (tower != undefined){
                 creep.energieAbgeben(tower);
             //Dann Spawn voll machen    
-            }else if (Game.spawns.Spawn1.energy < Game.spawns.Spawn1.energyCapacity){//creep.room.find(FIND_MY_SPAWNS, {filter: (s) => s.energy < s.energyCapacity && s.room.name == creep.room.name}).length != 0){
-                //creep.energieAbgeben(creep.room.find(FIND_MY_SPAWNS, {filter: (s) => s.energy < s.energyCapacity && s.room.name == creep.room.name})[0]);
-                creep.energieAbgeben(Game.spawns.Spawn1);
+            }else if (creep.room.find(FIND_MY_SPAWNS, {filter: (s) => s.energy < s.energyCapacity}).length != 0) {
+                    creep.energieAbgeben(creep.room.find(FIND_MY_SPAWNS)[0]);
             }else{
                 var extension = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION && s.energy < s.energyCapacity});
                 //Dann Extensions voll machen
