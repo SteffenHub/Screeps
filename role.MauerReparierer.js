@@ -20,7 +20,7 @@ module.exports = {
                     //Wenn er eine Reparier Auftrag hat
                     if (creep.memory.reparierZiel != undefined){
                         if (Game.getObjectById(creep.memory.reparierZiel.id) == undefined){
-                            creep.Memory.reparierZiel = undefined;
+                            creep.memory.reparierZiel = undefined;
                         }else{
                             //Wenn das zu reparierende Gebauede fertig repariert ist
                             if (Game.getObjectById(creep.memory.reparierZiel.id).hits == Game.getObjectById(creep.memory.reparierZiel.id).hitsMax){
@@ -31,7 +31,7 @@ module.exports = {
                         }
                         //Wenn es keinen reparier Auftrag gibt -> suche nach einen
                     }else{
-                        var kaputteMauern = creep.room.find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_WALL || s.structureType == StructureRampart});
+                        var kaputteMauern = creep.room.find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_WALL || s.structureType == STRUCTURE_RAMPART});
                         //Wenn es mind. eine Mauer gibt
                         if(kaputteMauern != undefined && kaputteMauern.length != 0){
                             var schlimmesteMauer = kaputteMauern[0];
@@ -52,6 +52,9 @@ module.exports = {
             //arbeit nicht -> Energie aufladen
         }else{
             creep.holeEnergie();
+            if (creep.memory.reparierZiel != undefined) {
+                creep.memory.reparierZiel = undefined;
+            }
         }
     }
 
