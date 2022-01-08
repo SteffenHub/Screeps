@@ -11,11 +11,13 @@ require('prototype.Tower')();
 
 module.exports.loop = function () {
 
+    /*
     //Die Schritte der creeps tracken
     for (let name in Game.rooms){
         Game.rooms[name].trackUsage();
         Game.rooms[name].baueStrassen();
     }
+     */
 
     //Tote Creeps loeschen
     for(let name in Memory.creeps){

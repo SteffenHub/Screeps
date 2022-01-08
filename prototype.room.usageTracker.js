@@ -34,7 +34,7 @@ module.exports = function(){
         this.speichere("ticksSeitStrassenUpdate", this.getEintragAusSpeicher("ticksSeitStrassenUpdate") + 1);
 
         //getrackte Daten zuruecksetzen
-        if (this.getEintragAusSpeicher("ticksSeitStrassenUpdate") > 4500){
+        if (this.getEintragAusSpeicher("ticksSeitStrassenUpdate") > 8500){
             this.loscheEintragImSpeicher("usage");
             this.loscheEintragImSpeicher("ticksSeitStrassenUpdate");
         }

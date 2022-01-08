@@ -32,8 +32,6 @@ module.exports = {
                         //Wenn es keinen reparier Auftrag gibt -> suche nach einen
                     }else{
                         var kaputteMauern = creep.room.find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_WALL || s.structureType == StructureRampart});
-                        console.log(kaputteMauern)
-                        Memory.tmp = kaputteMauern;
                         //Wenn es mind. eine Mauer gibt
                         if(kaputteMauern != undefined && kaputteMauern.length != 0){
                             var schlimmesteMauer = kaputteMauern[0];
