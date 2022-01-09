@@ -4,7 +4,7 @@ module.exports = function() {
      * Wenn Energie voll ist wird ein Sammler gespawnt
      */
     StructureSpawn.prototype.spawnSammler = function(){
-        var argumente = {role:'Sammler', arbeitet: false};
+        var argumente = {role:'Sammler',hauptRaum: this.room.name, arbeitet: false};
         this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
@@ -12,7 +12,7 @@ module.exports = function() {
      * Wenn Energie voll ist wird ein Distanz Sammler gespawnt
      */
     StructureSpawn.prototype.spawnDistanzSammler = function(zielRaum){
-        var argumente = {role:'distanzSammler', 'arbeitet': false, 'hauptRaum': this.room.name, 'zielRaum': zielRaum};
+        var argumente = {role:'distanzSammler', 'arbeitet': false, hauptRaum: this.room.name, 'zielRaum': zielRaum};
         this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
@@ -20,7 +20,7 @@ module.exports = function() {
      * Wenn Energie voll ist wird ein Upgrader gespawnt
      */
     StructureSpawn.prototype.spawnUpgrader = function(){
-        var argumente = {role:'Upgrader', arbeitet: false};
+        var argumente = {role:'Upgrader',hauptRaum: this.room.name, arbeitet: false};
         this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
@@ -28,7 +28,7 @@ module.exports = function() {
      * Wenn Energie voll ist wird ein Bauerbeiter gespawnt
      */
     StructureSpawn.prototype.spawnBauerbeiter = function(){
-        var argumente = {role:'Bauerbeiter', arbeitet: false};
+        var argumente = {role:'Bauerbeiter',hauptRaum: this.room.name, arbeitet: false};
         this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
@@ -36,7 +36,7 @@ module.exports = function() {
      * Wenn Energie voll ist wird ein mauer reparierer gespawnt
      */
     StructureSpawn.prototype.spawnMauerReparierer = function(){
-        var argumente = {role:'mauerReparierer', arbeitet: false};
+        var argumente = {role:'mauerReparierer',hauptRaum: this.room.name, arbeitet: false};
         this.creepErstellen(this.getBalancedKonfiguration(),argumente);
     };
 
@@ -44,12 +44,12 @@ module.exports = function() {
      * Wenn genug Energie da ist wird ein Claimer gespawnt
      */
     StructureSpawn.prototype.spawnClaimer = function(zielRaum){
-        var argumente = {role: 'Claimer', 'zielRaum': zielRaum};
+        var argumente = {role: 'Claimer', hauptRaum: this.room.name, 'zielRaum': zielRaum};
         this.creepErstellen([WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CLAIM,MOVE],argumente);
     };
 
     StructureSpawn.prototype.spawnAngreifer = function(zielRaum){
-        var argumente = {role: 'Angreifer', 'zielRaum': zielRaum};
+        var argumente = {role: 'Angreifer', hauptRaum: this.room.name, 'zielRaum': zielRaum};
         this.creepErstellen(this.getAngreiferKonfiguration(), argumente);
     };
 
