@@ -1,25 +1,12 @@
-var roleSammler = require('role.Sammler');
-var roleDistanzSammler = require('role.distanzSammler');
-var roleUpgrader = require('role.Upgrader');
-var roleBauerbeiter = require('role.Bauerbeiter');
-var roleMauerRepariere = require('role.MauerReparierer');
-var roleClaimer = require('role.Claimer');
-var roleAngreifer = require('role.Angreifer');
-var roleDistanzUpgrader = require('role.distanzUpgrader');
-
 require('prototype.Spawn')();
 require('prototype.room.usageTracker')();
 require('prototype.room.raumKonstrukteur')();
 require('prototype.Tower')();
+require('prototype.creep')();
 
 module.exports.loop = function () {
 
-    //if (Game.rooms.E9N23.controller.upgradeBlocked == 30){
-    //    console.log("ANGRIEFEN")
-    //}
-
     Memory.ticksClaim = Memory.ticksClaim + 1;
-    Memory.neueClaimer = false;
     if (Memory.ticksClaim%1000 == 0){
         Memory.neueClaimer = true;
     }
@@ -48,24 +35,7 @@ module.exports.loop = function () {
     var creep = undefined;
     for (let name in Game.creeps) {
         creep = Game.creeps[name];
-
-        if (creep.memory.role == 'Sammler') {
-            roleSammler.run(creep);
-        } else if (creep.memory.role == 'distanzSammler') {
-            roleDistanzSammler.run(creep);
-        } else if (creep.memory.role == 'Upgrader') {
-            roleUpgrader.run(creep);
-        } else if (creep.memory.role == 'Bauerbeiter') {
-            roleBauerbeiter.run(creep);
-        } else if (creep.memory.role == 'mauerReparierer') {
-            roleMauerRepariere.run(creep);
-        } else if (creep.memory.role == 'Claimer') {
-            roleClaimer.run(creep);
-        } else if (creep.memory.role == 'Angreifer') {
-            roleAngreifer.run(creep);
-        } else if (creep.memory.role == 'distanzUpgrader') {
-            roleDistanzUpgrader.run(creep);
-        }
+        creep.machDeinJob();
     }
 
     if (_.sum(Game.creeps, (c) => c.memory.role == 'Angreifer' && c.memory.hauptRaum == 'E9N22') < 0) {

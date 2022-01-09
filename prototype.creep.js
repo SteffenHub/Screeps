@@ -1,4 +1,36 @@
+const roleSammler = require("./role.Sammler");
+const roleDistanzSammler = require("./role.distanzSammler");
+const roleUpgrader = require("./role.Upgrader");
+const roleBauerbeiter = require("./role.Bauerbeiter");
+const roleMauerRepariere = require("./role.MauerReparierer");
+const roleClaimer = require("./role.Claimer");
+const roleAngreifer = require("./role.Angreifer");
+const roleDistanzUpgrader = require("./role.distanzUpgrader");
+
 module.exports = function() {
+
+    /**
+     * Ruft den jeweiligen Code auf, dem der Role zugeschrieben ist
+     */
+    Creep.prototype.machDeinJob = function(){
+        if (this.memory.role == 'Sammler') {
+            roleSammler.run(this);
+        } else if (this.memory.role == 'distanzSammler') {
+            roleDistanzSammler.run(this);
+        } else if (this.memory.role == 'Upgrader') {
+            roleUpgrader.run(this);
+        } else if (this.memory.role == 'Bauerbeiter') {
+            roleBauerbeiter.run(this);
+        } else if (this.memory.role == 'mauerReparierer') {
+            roleMauerRepariere.run(this);
+        } else if (this.memory.role == 'Claimer') {
+            roleClaimer.run(this);
+        } else if (this.memory.role == 'Angreifer') {
+            roleAngreifer.run(this);
+        } else if (this.memory.role == 'distanzUpgrader') {
+            roleDistanzUpgrader.run(this);
+        }
+    };
 
     /**
      * Organisiert Energie.
