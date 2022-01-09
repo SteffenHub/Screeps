@@ -1,11 +1,11 @@
-
+require('prototype.creep.suchen')();
 
 module.exports = {
     run: function(creep){
 
         if (creep.arbeitet()){
                //Erstmal tower voll machen
-               var tower = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy < s.energyCapacity});
+               var tower = creep.sucheNaechstenTowerNichtVoll();
                if (tower != undefined){
                     creep.energieAbgeben(tower);
                }else{

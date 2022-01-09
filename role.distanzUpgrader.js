@@ -1,4 +1,5 @@
 var roleUpgrader = require('role.Upgrader');
+require('prototype.creep.suchen')();
 module.exports = {
 
     run: function(creep){
@@ -10,13 +11,13 @@ module.exports = {
                     roleUpgrader.run(creep);
             //Wenn nicht genug Energie da ist -> Energie holen
             }else {
-                creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.zielRaum)));
+                creep.moveTo(creep.sucheRaumExit(creep.memory.zielRaum));
             }
         //Wenn wir im zielRaum sind
         }else{
             //Wenn genug energie da ist -> zurueck gehen
             if (creep.arbeitet()){
-                creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.hauptRaum)));
+                creep.moveTo(creep.sucheRaumExit(creep.memory.hauptRaum));
                 //Wenn nicht genug Energie da ist -> Energie holen
             }else {
                 roleUpgrader.run(creep);

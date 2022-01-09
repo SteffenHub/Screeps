@@ -99,7 +99,7 @@ module.exports = function() {
      * @returns true wenn eins gefunden, wo man hin gehen kann
      */
     Creep.prototype.energieSourceAbbauen = function(){
-        var energy = this.pos.findClosestByPath(FIND_SOURCES, {filter: (s) => s.energy > 0});
+        var energy = this.sucheNaechsteEnergieSourceMitEnergie();
         if(energy != undefined){
             if (this.harvest(energy) == ERR_NOT_IN_RANGE){
                 this.moveTo(energy);
@@ -115,7 +115,7 @@ module.exports = function() {
      * @returns true wenn eins gefunden, wo man hin gehen kann
      */
     Creep.prototype.droppedEnergieHolen = function(){
-        var droppedEnergy = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {filter: (s) => s.energy > 0});
+        var droppedEnergy = this.sucheNaechstefallenGelasseneResourceMitEnergie();
         if (droppedEnergy != undefined){
             if(this.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
                 this.moveTo(droppedEnergy);
@@ -131,7 +131,7 @@ module.exports = function() {
      * @returns true wenn eins gefunden, wo man hin gehen kann
      */
     Creep.prototype.energieAusGrabsteinHolen = function(){
-        var tombstone = this.pos.findClosestByPath(FIND_TOMBSTONES, {filter: (t) => t.store.energy > 0});
+        var tombstone = this.sucheNaechsteGrabsteinMitEnergie();
         if (tombstone != undefined){
             //Wenn es eine Liste ist(mehr als ein Grabstein)
             if (tombstone[0] != undefined){
@@ -151,12 +151,8 @@ module.exports = function() {
      * @returns true wenn eins gefunden, wo man hin gehen kann
      */
     Creep.prototype.energieAusRuineHolen = function(){
-        var ruine = this.pos.findClosestByPath(FIND_RUINS, {filter: (r) => r.store.energy > 0});
+        var ruine = this.sucheNaechsteRuineMitEnergie();
         if (ruine != undefined){
-            //Wenn es eine Liste ist(mehr als eine ruine)
-            if (ruine[0] != undefined){
-                ruine = ruine[0];
-            }
             if(this.withdraw(ruine,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.moveTo(ruine);
             }

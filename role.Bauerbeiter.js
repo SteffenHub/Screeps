@@ -1,5 +1,5 @@
 var roleUpgrader = require('role.Upgrader');
-
+require('prototype.creep.bewegung')();
 module.exports = {
  //TODO Spawns haben prio
     run: function(creep){
@@ -7,12 +7,12 @@ module.exports = {
         //Wenn arbeitet -> arbeit machen
         if (creep.arbeitet()){
             //Erstmal tower voll machen
-            var tower = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy < s.energyCapacity});
+            var tower = creep.sucheNaechstenTowerNichtVoll();
             if (tower != undefined){
                 creep.energieAbgeben(tower);
             }else{
                 //Extensions bevorzugen
-                var extension = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType == STRUCTURE_EXTENSION}});
+                var extension = creep.sucheNaechstenBauauftragExtension();
                 if(extension != undefined){
                     this.bauen(creep,extension);
                 //Sonst alle anderen Gebaeude
@@ -31,7 +31,7 @@ module.exports = {
                         }
                     //Wenn es keinen reparier Auftrag gibt -> suche nach einen
                     }else{
-                        var kaputtesGebauede = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: (s) => s.hits < (s.hitsMax/2) && s.structureType != STRUCTURE_WALL && s.structureType != STRUCTURE_RAMPART});
+                        var kaputtesGebauede = creep.sucheNaechsteStrukturNichtMauerMitHalbeLeben();
 
                         //Wenn ein Gebauede mit 50% Leben existiert
                         if(kaputtesGebauede != undefined){
@@ -39,7 +39,7 @@ module.exports = {
                             this.reparieren(creep,kaputtesGebauede);
                         //Sonst baue neue Sachen
                         }else{
-                            var gebaeude = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+                            var gebaeude = creep.sucheNaechstenBauauftrag();
                             //Wenn es arbeit gibt -> arbeite
                             if (gebaeude != undefined){
                                 this.bauen(creep,gebaeude);

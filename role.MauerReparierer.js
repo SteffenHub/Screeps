@@ -1,4 +1,5 @@
 var roleBauerbeiter = require('role.Bauerbeiter');
+require('prototype.creep.suchen')();
 
 module.exports = {
 
@@ -7,12 +8,12 @@ module.exports = {
         //Wenn arbeitet -> arbeit machen
         if (creep.arbeitet()){
             //Erstmal tower voll machen
-            var tower = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_TOWER && s.energy < s.energyCapacity});
+            var tower = creep.sucheNaechstenTowerNichtVoll();
             if (tower != undefined){
                 creep.energieAbgeben(tower);
             }else{
                 //Extensions bevorzugen
-                var extension = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, { filter: (s) => {return s.structureType == STRUCTURE_EXTENSION}});
+                var extension = creep.sucheNaechstenBauauftragExtension();
                 if(extension != undefined){
                     this.bauen(creep,extension);
                     //Sonst alle anderen Gebaeude
