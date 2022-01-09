@@ -53,6 +53,11 @@ module.exports = function() {
         this.creepErstellen(this.getAngreiferKonfiguration(), argumente);
     };
 
+    StructureSpawn.prototype.spawnDistanzUpgrader = function(zielRaum){
+        var argumente = {role: 'distanzUpgrader', hauptRaum: this.room.name, 'zielRaum': zielRaum};
+        this.creepErstellen(this.getBalancedKonfiguration(), argumente);
+    }
+
 
 
 
