@@ -14,22 +14,20 @@ require('prototype.Tower')();
 
 module.exports.loop = function () {
 
-    if (Game.rooms.E9N23.controller.upgradeBlocked == 30){
-        console.log("ANGRIEFEN")
-    }
-    /*
+    //if (Game.rooms.E9N23.controller.upgradeBlocked == 30){
+    //    console.log("ANGRIEFEN")
+    //}
+
     Memory.ticksClaim = Memory.ticksClaim + 1;
     Memory.neueClaimer = false;
     if (Memory.ticksClaim%1000 == 0){
         Memory.neueClaimer = true;
     }
     if (Memory.neueClaimer){
-        if (Game.spawns.Spawn1.createCreep([CLAIM,MOVE],undefined,{role: 'Claimer', zielRaum: 'E9N23'}) >= 0) {
+        if (Game.spawns.Spawn1.createCreep([CLAIM,CLAIM,CLAIM,MOVE],undefined,{role: 'Claimer', zielRaum: 'E9N23'}) >= 0) {
             Memory.neueClaimer = false;
         }
     }
-
-     */
 
     /*
     //Die Schritte der creeps tracken
