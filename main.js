@@ -14,6 +14,23 @@ require('prototype.Tower')();
 
 module.exports.loop = function () {
 
+    if (Game.rooms.E9N23.controller.upgradeBlocked == 30){
+        console.log("ANGRIEFEN")
+    }
+    /*
+    Memory.ticksClaim = Memory.ticksClaim + 1;
+    Memory.neueClaimer = false;
+    if (Memory.ticksClaim%1000 == 0){
+        Memory.neueClaimer = true;
+    }
+    if (Memory.neueClaimer){
+        if (Game.spawns.Spawn1.createCreep([CLAIM,MOVE],undefined,{role: 'Claimer', zielRaum: 'E9N23'}) >= 0) {
+            Memory.neueClaimer = false;
+        }
+    }
+
+     */
+
     /*
     //Die Schritte der creeps tracken
     for (let name in Game.rooms){
@@ -49,7 +66,6 @@ module.exports.loop = function () {
         } else if (creep.memory.role == 'Angreifer') {
             roleAngreifer.run(creep);
         } else if (creep.memory.role == 'distanzUpgrader') {
-            console.log("distanzUpgrader wird ausgefuehrt: " + creep.name);
             roleDistanzUpgrader.run(creep);
         }
     }
@@ -92,17 +108,19 @@ module.exports.loop = function () {
             Game.spawns.Spawn1.spawnDistanzSammler('E9N21');
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader' && c.memory.hauptRaum == 'E9N22') < 1) {
             Game.spawns.Spawn1.spawnUpgrader();
-        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzUpgrader' && c.memory.hauptRaum == 'E9N22' && c.memory.zielRaum == "E9N23") < 1) {
-            Game.spawns.Spawn1.spawnDistanzUpgrader('E9N23');
-        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter' && c.memory.hauptRaum == 'E9N22') < 1) {
+        } //else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzUpgrader' && c.memory.hauptRaum == 'E9N22' && c.memory.zielRaum == "E9N23") < 1) {
+            //Game.spawns.Spawn1.spawnDistanzUpgrader('E9N23');
+        //}
+          else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter' && c.memory.hauptRaum == 'E9N22') < 1) {
             Game.spawns.Spawn1.spawnBauerbeiter();
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'mauerReparierer' && c.memory.hauptRaum == 'E9N22') < 1) {
             Game.spawns.Spawn1.spawnMauerReparierer();
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader' && c.memory.hauptRaum == 'E9N22') < 2) {
             Game.spawns.Spawn1.spawnUpgrader();
-        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzUpgrader' && c.memory.hauptRaum == 'E9N22' && c.memory.zielRaum == "E9N23") < 2) {
-            Game.spawns.Spawn1.spawnDistanzUpgrader('E9N23');
-        } else {
+        } //else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzUpgrader' && c.memory.hauptRaum == 'E9N22' && c.memory.zielRaum == "E9N23") < 2) {
+            //Game.spawns.Spawn1.spawnDistanzUpgrader('E9N23');
+        //}
+         else {
             Game.spawns.Spawn1.spawnBauerbeiter();
         }
     }
@@ -120,9 +138,10 @@ module.exports.loop = function () {
             Game.spawns.Spawn3.spawnBauerbeiter();
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E7N23") < 2) {
             Game.spawns.Spawn3.spawnDistanzSammler('E7N23');
-        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E9N23") < 2) {
-            Game.spawns.Spawn3.spawnDistanzSammler('E9N23');
-        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzUpgrader' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E8N24") < 2) {
+        } //else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E9N23") < 2) {
+            //Game.spawns.Spawn3.spawnDistanzSammler('E9N23');
+        //}
+         else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzUpgrader' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E8N24") < 2) {
             Game.spawns.Spawn3.spawnDistanzUpgrader('E8N24');
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'mauerReparierer' && c.memory.hauptRaum == 'E8N23') < 1) {
             Game.spawns.Spawn3.spawnMauerReparierer();
