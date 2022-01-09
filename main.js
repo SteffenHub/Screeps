@@ -46,27 +46,31 @@ module.exports.loop = function () {
         if (anzahlSammler < 2) {
             if (anzahlSammler == 0) {
                 //Wenn es gar keine Creeps mehr gibt
-                if (_.isEmpty(Game.creeps)) {
-                    Game.spawns.Spawn1.creepErstellen([WORK, CARRY, MOVE], {"role": "Sammler"});
+                if (_.sum(Game.creeps, (c) => c.memory.hauptRaum == 'E9N22') == 0) {
+                    Game.spawns.Spawn1.creepErstellen([WORK, CARRY, MOVE], {"role": "Sammler", hauptRaum: 'E9N22'});
                 } else {
                     var role = "";
-                    if (_.sum(Game.creeps, (c) => c.memory.role == 'mauerReparierer') > 0) {
+                    if (_.sum(Game.creeps, (c) => c.memory.role == 'mauerReparierer' && c.memory.hauptRaum == 'E9N22') > 0) {
                         role = "mauerReparierer";
-                    } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter') > 0) {
+                    } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter' && c.memory.hauptRaum == 'E9N22') > 0) {
                         role = "Bauerbeiter";
-                    } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader') > 0) {
+                    } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader' && c.memory.hauptRaum == 'E9N22') > 0) {
                         role = "Upgrader";
                     }
                     if (role != "") {
                         for (let i = 0; i < Object.keys(Game.creeps).length; i++) {
-                            if (Game.creeps[Object.keys(Game.creeps)[i]].memory.role == role) {
+                            if (Game.creeps[Object.keys(Game.creeps)[i]].memory.role == role && Game.creeps[Object.keys(Game.creeps)[i]].memory.hauptRaum == 'E9N22') {
                                 Game.creeps[Object.keys(Game.creeps)[i]].memory.role = "Sammler";
                                 break;
                             }
                         }
                     } else {
-                        var randNummer = Math.floor(Math.random() * Object.keys(Game.creeps).length);
-                        Game.creeps[Object.keys(Game.creeps)[randNummer]].memory.role = "Sammler";
+                        for (let i = 0; i < Object.keys(Game.creeps).length; i++) {
+                            if (Game.creeps[Object.keys(Game.creeps)[i]].memory.hauptRaum == 'E9N22') {
+                                Game.creeps[Object.keys(Game.creeps)[i]].memory.role = "Sammler";
+                                break;
+                            }
+                        }
                     }
                 }
             } else {
