@@ -1,62 +1,121 @@
+
 module.exports = function() {
 
     /**
      * Wenn Energie voll ist wird ein Sammler gespawnt
      */
     StructureSpawn.prototype.spawnSammler = function(){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role:'Sammler',hauptRaum: this.room.name, arbeitet: false};
-        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: WORK, prozent: 41},
+                                                            {name: CARRY, prozent: 33},
+                                                            {name: MOVE, prozent: 25}]),
+                                                            argumente);
     };
 
     /**
      * Wenn Energie voll ist wird ein Distanz Sammler gespawnt
      */
     StructureSpawn.prototype.spawnDistanzSammler = function(zielRaum){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role:'distanzSammler', 'arbeitet': false, hauptRaum: this.room.name, 'zielRaum': zielRaum};
-        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: WORK, prozent: 20},
+                                                            {name: CARRY, prozent: 50},
+                                                            {name: MOVE, prozent: 30}]),
+                                                            argumente);
     };
 
     /**
      * Wenn Energie voll ist wird ein Upgrader gespawnt
      */
     StructureSpawn.prototype.spawnUpgrader = function(){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role:'Upgrader',hauptRaum: this.room.name, arbeitet: false};
-        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: WORK, prozent: 20},
+                                                            {name: CARRY, prozent: 40},
+                                                            {name: MOVE, prozent: 40}]),
+                                                            argumente);
     };
 
     /**
      * Wenn Energie voll ist wird ein Bauerbeiter gespawnt
      */
     StructureSpawn.prototype.spawnBauerbeiter = function(){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role:'Bauerbeiter',hauptRaum: this.room.name, arbeitet: false};
-        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: WORK, prozent: 33},
+                                                            {name: CARRY, prozent: 33},
+                                                            {name: MOVE, prozent: 33}]),
+                                                            argumente);
     };
 
     /**
      * Wenn Energie voll ist wird ein mauer reparierer gespawnt
      */
     StructureSpawn.prototype.spawnMauerReparierer = function(){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role:'mauerReparierer',hauptRaum: this.room.name, arbeitet: false};
-        this.creepErstellen(this.getBalancedKonfiguration(),argumente);
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: WORK, prozent: 33},
+                                                            {name: CARRY, prozent: 33},
+                                                            {name: MOVE, prozent: 33}]),
+                                                            argumente);
     };
 
     /**
      * Wenn genug Energie da ist wird ein Claimer gespawnt
      */
     StructureSpawn.prototype.spawnClaimer = function(zielRaum){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role: 'Claimer', hauptRaum: this.room.name, 'zielRaum': zielRaum};
         this.creepErstellen([WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CLAIM,MOVE],argumente);
     };
 
+    /**
+     * Wenn Energie voll ist wird ein Angreifer gespawnt
+     */
     StructureSpawn.prototype.spawnAngreifer = function(zielRaum){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role: 'Angreifer', hauptRaum: this.room.name, 'zielRaum': zielRaum};
-        this.creepErstellen(this.getAngreiferKonfiguration(), argumente);
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: TOUGH, prozent: 3},
+                                                            {name: MOVE, prozent: 43},
+                                                            {name: ATTACK, prozent: 54}]),
+                                                            argumente);
     };
 
+    /**
+     * Wenn Energie voll ist wird ein DistantUpgrader gespawnt
+     */
     StructureSpawn.prototype.spawnDistanzUpgrader = function(zielRaum){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
         var argumente = {role: 'distanzUpgrader', hauptRaum: this.room.name, 'zielRaum': zielRaum};
-        this.creepErstellen(this.getBalancedKonfiguration(), argumente);
-    }
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: WORK, prozent: 20},
+                                                            {name: CARRY, prozent: 50},
+                                                            {name: MOVE, prozent: 30}]),
+                                                            argumente);
+    };
 
 
 
@@ -71,9 +130,17 @@ module.exports = function() {
     \*                           */
 
 
-
-
-
+    /**
+     * Gibt aus, ob der Raum volle Energie hat(Extensions und Spawn voll)
+     *
+     * @returns {boolean} ist der Raum voll
+     */
+    StructureSpawn.prototype.checkRoomEnergieIsFull = function (){
+        if (this.room.energyAvailable == this.room.energyCapacityAvailable){
+            return true;
+        }
+        return false;
+    };
 
     /**
      * Spawnt einen Creep mit gegebener Konfiguration und argumenten
@@ -86,118 +153,106 @@ module.exports = function() {
     };
 
     /**
-     * Gibt einen Creep aus, der moeglichste ausgeglichen ist.
-     * Dabei folgende Hierarchi(WORK,CARRY,MOVE)
-     * 
-     * @returns ein Array mit der Konfiguration
+     * Baut eine Konfiguration fuer einen Creep zusammen.
+     * Indem eine prozentuale Verteilung der Teile angeben wird
+     *
+     * @param verfuegbareEnergie wie viel Energie darf diese Konfiguration kosten
+     * @param aufbau welche Teile soll die Konfiguration haben und mit wie viel Prozent sollen diese eingebaut werden (z.B. aufbau = [{name: WORK, prozent: 40},{name: CARRY, prozent: 30}, ...])
+     * @returns {[]|undefined} die Konfiguration, die moeglichst na an der Prozent verteilung liegt. Oder undefined falls nicht moeglich(zu wenig Energie)
      */
-    StructureSpawn.prototype.getBalancedKonfiguration = function(){
-        var raumEnergie = this.room.energyCapacityAvailable;
+    StructureSpawn.prototype.getProzentKonfiguration = function(verfuegbareEnergie,aufbau){
+        var verfuegbareEnergie = verfuegbareEnergie;
+        var verbrauchteEnergie = 0;
         var konfigurationTmp = [];
-        var lauf = 1;
-        while (raumEnergie > 0){
-            if (lauf == 1){
-                raumEnergie -= 100;
-                if (raumEnergie < 0){
-                    raumEnergie += 100;
-                }else {
-                    konfigurationTmp.push(0);
+
+        //alles einmal rein
+        for (let i = 0; i < aufbau.length; i++) {
+            konfigurationTmp.push(1);
+            verbrauchteEnergie += this.getKostenVonTeil(aufbau[i].name);
+        }
+        //pruefe, ob es ueberhaupt moeglich ist mit dieser verfuegbaren Energie eine konfiguration zu bauen
+        if (verbrauchteEnergie > verfuegbareEnergie){
+            return undefined;
+        }
+
+        while (verbrauchteEnergie != verfuegbareEnergie){
+            //berechnen wie viele teile gerade drin sind
+            var parts = 0;
+            for (let i = 0; i < konfigurationTmp.length; i++) {
+                parts += konfigurationTmp[i];
+            }
+
+            //berechnen, wie weit die aktuelle Konfiguration von der erwartung entfernt ist
+            var abweichungen = [];
+            for (let i = 0; i < konfigurationTmp.length; i++) {
+                abweichungen.push({abweichung: aufbau[i].prozent - ((konfigurationTmp[i]/parts)*100), teil: i});
+            }
+
+            //abweichungen sortieren, um groeeste Abweichung zu bevorzugen
+            abweichungen.sort((a, b) => -a.abweichung+b.abweichung);
+
+            //die aktuelle Konfiguration erweitern
+            var konfErweitert = false;
+            for (let i = 0; i < abweichungen.length; i++) {
+                //kosten fuer diese erweiterung
+                var cost = this.getKostenVonTeil(aufbau[abweichungen[i].teil].name);
+                //Wenn diese Erweiterung noch rein passt. Sonst mit der naechsten mit groesster abweichung probieren
+                if (verbrauchteEnergie + cost <= verfuegbareEnergie){
+                    verbrauchteEnergie += cost;
+                    ++konfigurationTmp[abweichungen[i].teil];
+                    konfErweitert = true;
+                    break;
                 }
-            }else if (lauf == 2){
-                konfigurationTmp.push(1);
-                raumEnergie -= 50;
-            }else if (lauf == 3){
-                konfigurationTmp.push(2);
-                raumEnergie -= 50;
-                lauf = 0;
             }
-            ++lauf;
-        }
 
-        var workCount = 0;
-        var carryCount = 0;
-        var moveCount = 0;
-        for (let konf of konfigurationTmp){
-            if (konf == 0){
-                ++workCount;
-            }else if (konf == 1){
-                ++carryCount;
-            }else {
-                ++moveCount;
+            //Wenn die aktuelle Konfiguration NICHT erweitert wurde -> mehr kann nicht hinzugefuegt werden
+            if (!konfErweitert){
+                break;
             }
         }
 
-        var konfiguration = [];
-        for (let i = 0; i < workCount; i++) {
-            konfiguration.push(WORK);
-        }
-        for (let i = 0; i < carryCount; i++) {
-            konfiguration.push(CARRY);
-        }
-        for (let i = 0; i < moveCount; i++) {
-            konfiguration.push(MOVE);
+        //die Konfiguration zsm. stellen
+        konfiguration = [];
+        for (let i = 0; i < konfigurationTmp.length; i++) {
+            for (let j = 0; j < konfigurationTmp[i]; j++) {
+                konfiguration.push(aufbau[i].name);
+            }
         }
 
         return konfiguration;
     };
 
-    StructureSpawn.prototype.getAngreiferKonfiguration = function(){
-        var raumEnergie = this.room.energyCapacityAvailable;
-        var konfigurationTmp = [];
-        var lauf = 1;
-        while (raumEnergie >= 50){
-            if (lauf == 1){
-                raumEnergie -= 80;
-                if (raumEnergie < 0){
-                    raumEnergie += 80;
-                }else {
-                    konfigurationTmp.push(0);
-                }
-            }else if (lauf == 2){
-                raumEnergie -= 50;
-                if (raumEnergie < 0){
-                    raumEnergie += 50;
-                }else {
-                    konfigurationTmp.push(1);
-                }
-                lauf = 0;
-            }
-            ++lauf;
+    /**
+     * gibt die Energie Kosten fuer ein Koerperteil vom Creep aus
+     *
+     * @param teil fuer welches Koerperteil (z.B. MOVE)
+     * @returns {undefined|number} die kosten fuer das Teil
+     */
+    StructureSpawn.prototype.getKostenVonTeil = function(teil){
+        if (teil == WORK){
+            return 100;
         }
-        while (raumEnergie > 0){
-            raumEnergie -= 10;
-            if (raumEnergie < 0){
-                raumEnergie += 10;
-            }else {
-                konfigurationTmp.push(2);
-            }
+        if (teil == CARRY){
+            return 50;
         }
-
-        var angriffCount = 0;
-        var toughCount = 0;
-        var moveCount = 0;
-        for (let konf of konfigurationTmp){
-            if (konf == 0){
-                ++angriffCount;
-            }else if (konf == 1){
-                ++moveCount;
-            }else {
-                ++toughCount;
-            }
+        if (teil == MOVE){
+            return 50;
         }
-
-        var konfiguration = [];
-        for (let i = 0; i < toughCount; i++) {
-            konfiguration.push(TOUGH);
+        if (teil == ATTACK){
+            return 80;
         }
-        for (let i = 1; i < angriffCount; i++) {
-            konfiguration.push(ATTACK);
+        if (teil == RANGED_ATTACK){
+            return 150;
         }
-        for (let i = 0; i < moveCount; i++) {
-            konfiguration.push(MOVE);
+        if (teil == HEAL){
+            return 250;
         }
-        konfiguration.push(ATTACK);
-
-        return konfiguration;
-    };
+        if (teil == CLAIM){
+            return 600;
+        }
+        if (teil == TOUGH){
+            return 10;
+        }
+        return undefined;
+    }
 };
