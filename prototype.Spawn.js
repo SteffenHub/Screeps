@@ -48,6 +48,11 @@ module.exports = function() {
         this.creepErstellen([WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CLAIM,MOVE],argumente);
     };
 
+    StructureSpawn.prototype.spawnAngreifer = function(zielRaum){
+        var argumente = {role: 'Angreifer', 'zielRaum': zielRaum};
+        this.creepErstellen(this.getAngreiferKonfiguration(), argumente);
+    };
+
 
 
 
@@ -127,6 +132,66 @@ module.exports = function() {
         for (let i = 0; i < moveCount; i++) {
             konfiguration.push(MOVE);
         }
+
+        return konfiguration;
+    };
+
+    StructureSpawn.prototype.getAngreiferKonfiguration = function(){
+        var raumEnergie = this.room.energyCapacityAvailable;
+        var konfigurationTmp = [];
+        var lauf = 1;
+        while (raumEnergie >= 50){
+            if (lauf == 1){
+                raumEnergie -= 80;
+                if (raumEnergie < 0){
+                    raumEnergie += 80;
+                }else {
+                    konfigurationTmp.push(0);
+                }
+            }else if (lauf == 2){
+                raumEnergie -= 50;
+                if (raumEnergie < 0){
+                    raumEnergie += 50;
+                }else {
+                    konfigurationTmp.push(1);
+                }
+                lauf = 0;
+            }
+            ++lauf;
+        }
+        while (raumEnergie > 0){
+            raumEnergie -= 10;
+            if (raumEnergie < 0){
+                raumEnergie += 10;
+            }else {
+                konfigurationTmp.push(2);
+            }
+        }
+
+        var angriffCount = 0;
+        var toughCount = 0;
+        var moveCount = 0;
+        for (let konf of konfigurationTmp){
+            if (konf == 0){
+                ++angriffCount;
+            }else if (konf == 1){
+                ++moveCount;
+            }else {
+                ++toughCount;
+            }
+        }
+
+        var konfiguration = [];
+        for (let i = 0; i < toughCount; i++) {
+            konfiguration.push(TOUGH);
+        }
+        for (let i = 1; i < angriffCount; i++) {
+            konfiguration.push(ATTACK);
+        }
+        for (let i = 0; i < moveCount; i++) {
+            konfiguration.push(MOVE);
+        }
+        konfiguration.push(ATTACK);
 
         return konfiguration;
     };
