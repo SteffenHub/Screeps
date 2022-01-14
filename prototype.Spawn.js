@@ -32,6 +32,21 @@ module.exports = function() {
     };
 
     /**
+     * Wenn Energie voll ist wird ein Distanz Sammler gespawnt
+     */
+    StructureSpawn.prototype.spawnDistanzSammler = function(zielRaum, geheDurchRaum){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
+        var argumente = {role:'distanzSammler', 'arbeitet': false, hauptRaum: this.room.name, 'geheDurchRaum':geheDurchRaum, 'zielRaum': zielRaum};
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                                                    [{name: WORK, prozent: 20},
+                                                            {name: CARRY, prozent: 50},
+                                                            {name: MOVE, prozent: 30}]),
+                                                            argumente);
+    };
+
+    /**
      * Wenn Energie voll ist wird ein Upgrader gespawnt
      */
     StructureSpawn.prototype.spawnUpgrader = function(){
