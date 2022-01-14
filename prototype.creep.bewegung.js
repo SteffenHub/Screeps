@@ -11,9 +11,49 @@ module.exports = function () {
         if (this.room.name != raumName){
             this.moveTo(this.sucheRaumExit(raumName));
             return true;
-        }else{
+        }else if (this.room.name == raumName){
             return false;
         }
         return undefined;
+    };
+
+    Creep.prototype.geheZumHauptRaum = function(){
+        if (this.memory.hauptRaum == undefined){
+            //console.log("Es existiert kein hauptRaum im speicher von: " + this.name);
+            return undefined;
+        }
+        if (this.room.name == this.memory.hauptRaum){
+            return false;
+        }
+        return this.geheInRaumDurchZwRaum(this.memory.hauptRaum, this.memory.geheDurchRaum);
     }
-}
+
+    Creep.prototype.geheZumZielRaum = function(){
+        if (this.memory.zielRaum == undefined){
+            //console.log("Es existiert kein zielRaum im speicher von: " + this.name);
+            return undefined;
+        }
+        if (this.room.name == this.memory.zielRaum){
+            return false;
+        }
+        return this.geheInRaumDurchZwRaum(this.memory.zielRaum, this.memory.geheDurchRaum);
+    };
+
+
+     /*                       *\
+    |     Private Methoden      |
+     \*                       */
+
+
+
+
+    Creep.prototype.geheInRaumDurchZwRaum = function(zielRaum, zwischenRaum){
+        //Wenn es einen zwischenraum gibt und der creep gerade hin geht
+        if (zwischenRaum != undefined && this.geheInRaum(zwischenRaum)){
+            return true;
+        //Wenn wir im zielRaum sind
+        }else{
+            return this.geheInRaum(zielRaum);
+        }
+    };
+};

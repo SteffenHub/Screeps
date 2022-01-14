@@ -5,7 +5,8 @@ module.exports = {
 
         //Wenn der Creep Energie dabei hat
         if (creep.arbeitet()) {
-            if (!creep.geheInRaum(creep.memory.hauptRaum)){
+            //Wenn es einen zwischenraum gibt und der creep gerade hin geht
+            if (!creep.geheZumHauptRaum()){
                 //Erstmal tower voll machen
                 var tower = creep.sucheNaechstenTowerNichtVoll();
                 if (tower != undefined) {
@@ -26,7 +27,8 @@ module.exports = {
             //Der Creep hat keine Energie mehr
         } else {
             //Wenn der Creep im zielRaum ist
-            if (!creep.geheInRaum(creep.memory.zielRaum)){
+            //console.log(creep.geheZumZielRaum())
+            if (!creep.geheZumZielRaum()){
                 //hole dort Energie
                 creep.holeEnergie();
             }
