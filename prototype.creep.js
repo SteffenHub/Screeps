@@ -38,13 +38,13 @@ module.exports = function() {
      */
     Creep.prototype.holeEnergie = function(){
         //Erstmal nach richtigen Energie sourcen suchen
-        if(!this.energieSourceAbbauen()){
+        if(this.energieSourceAbbauen()){
         //Dann nach dropped sources suchen 
-        }else if (!this.droppedEnergieHolen()){
+        }else if (this.droppedEnergieHolen()){
         //Dann nach grabsteinen suchen    
-        }else if (!this.energieAusGrabsteinHolen()){       
+        }else if (this.energieAusGrabsteinHolen()){
          //Dann nach ruinen suchen    
-        }else if (!this.energieAusRuineHolen()){
+        }else if (this.energieAusRuineHolen()){
             
         }
     };
