@@ -3,6 +3,7 @@ require('prototype.room.usageTracker')();
 require('prototype.room.raumKonstrukteur')();
 require('prototype.Tower')();
 require('prototype.creep')();
+require("./prototype.room")();
 
 module.exports.loop = function () {
 
@@ -100,7 +101,7 @@ module.exports.loop = function () {
             Game.spawns.Spawn3.spawnDistanzSammler('E8N24');
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter' && c.memory.hauptRaum == 'E8N23') < 2) {
             Game.spawns.Spawn3.spawnBauerbeiter();
-        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E7N23") < 2) {
+        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E7N23") < 0) {
             Game.spawns.Spawn3.spawnDistanzSammler('E7N23');
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E9N23") < 1) {
             Game.spawns.Spawn3.spawnDistanzSammler('E9N23');
@@ -110,19 +111,47 @@ module.exports.loop = function () {
             Game.spawns.Spawn3.spawnDistanzUpgrader('E8N24');
         } else if (_.sum(Game.creeps, (c) => c.memory.role == 'mauerReparierer' && c.memory.hauptRaum == 'E8N23') < 1) {
             Game.spawns.Spawn3.spawnMauerReparierer();
-        } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzSammler' && c.memory.hauptRaum == 'E8N23' && c.memory.zielRaum == "E7N23") < 4) {
-            Game.spawns.Spawn3.spawnDistanzSammler('E7N23');
         } else {
             Game.spawns.Spawn3.spawnBauerbeiter();
         }
     }
 
+    /*
+    if (_.sum(Game.creeps, (c) => c.memory.role == 'Sammler' && c.memory.hauptRaum == 'E7N23') < 4) {
+        Game.spawns.Spawn2.spawnSammler();
+    } //else if (_.sum(Game.creeps, (c) => c.memory.role == 'Mauerbrecher' && c.memory.hauptRaum == 'E7N23') < 0) {
+        //Game.spawns.Spawn2.spawnMauerBrecher(13,2);
+    //}
+    else if (_.sum(Game.creeps, (c) => c.memory.role == 'Bauerbeiter' && c.memory.hauptRaum == 'E7N23') < 2) {
+        Game.spawns.Spawn2.spawnBauerbeiter();
+    } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Upgrader' && c.memory.hauptRaum == 'E7N23') < 1) {
+        Game.spawns.Spawn2.spawnUpgrader();
+    }else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzBauerbeiter' && c.memory.hauptRaum == 'E7N23' && c.memory.zielRaum == 'E6N23') < 2) {
+        Game.spawns.Spawn2.spawnDistanzBauerbeiter("E6N23");
+    } else if (_.sum(Game.creeps, (c) => c.memory.role == 'distanzBauerbeiter' && c.memory.hauptRaum == 'E7N23' && c.memory.zielRaum == 'E7N24') < 2) {
+        Game.spawns.Spawn2.spawnDistanzBauerbeiter("E7N24");
+    }
+
+     else if (_.sum(Game.creeps, (c) => c.memory.role == 'Angreifer' && c.memory.hauptRaum == 'E7N23' && c.memory.zielRaum == 'E6N23') < 1) {
+        Game.spawns.Spawn2.spawnAngreifer("E6N23");
+    } else if (_.sum(Game.creeps, (c) => c.memory.role == 'Angreifer' && c.memory.hauptRaum == 'E7N23' && c.memory.zielRaum == 'E6N22') < 1) {
+        Game.spawns.Spawn2.spawnAngreifer("E6N22", "E6N23");
+    }
+
+    else {
+        Game.spawns.Spawn2.spawnBauerbeiter();
+
+        //Game.spawns.Spawn2.spawnAngreifer("E6N23");
+    }
+    */
 
     //Die Tower schiessen lassen im Ernstfall
     for (let name in Game.rooms) {
+        Game.rooms[name].roleAusfuehren();
         var towers = Game.rooms[name].find(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_TOWER});
         for (let tower of towers) {
             tower.run();
         }
     }
+
 }
