@@ -49,7 +49,7 @@ module.exports = function () {
 
     Creep.prototype.geheInRaumDurchZwRaum = function(zielRaum, zwischenRaum){
         //Wenn es einen zwischenraum gibt und der creep gerade hin geht
-        if (zwischenRaum != undefined && this.geheInRaum(zwischenRaum)){
+        if (zwischenRaum != undefined && !this.geheInRaum(zwischenRaum)){
             return true;
         //Wenn wir im zielRaum sind
         }else{
