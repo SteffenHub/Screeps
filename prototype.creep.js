@@ -48,6 +48,9 @@ module.exports = function() {
      */
     Creep.prototype.holeEnergie = function(){
         //Erstmal nach richtigen Energie sourcen suchen
+        //if (this.containerEnergieHolen()){
+
+        //}else
         if(this.energieSourceAbbauen()){
         //Dann nach dropped sources suchen 
         }else if (this.droppedEnergieHolen()){
@@ -103,18 +106,51 @@ module.exports = function() {
 
 
 
+    Creep.prototype.containerEnergieHolen = function (){
+        var container = this.pos.findClosestByPath(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0});
+        if (container != undefined){
+            if (container.store.getCapacity() < container.store[RESOURCE_ENERGY]){
+                var containerTmp = this.pos.findClosestByPath(FIND_STRUCTURES, {filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] >= this.store.getFreeCapacity()});
+                if (containerTmp != undefined){
+                    container = containerTmp;
+                }
+            }
+            if(this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                this.moveTo(container);
+            }
+            return true
+        }
+        return false;
+    }
+
     /**
      * Sucht nach dem naechsten Energie Source und baut es ab bzw. geht erst dort hin
      * 
      * @returns true wenn eins gefunden, wo man hin gehen kann
      */
     Creep.prototype.energieSourceAbbauen = function(){
-        var energy = this.sucheNaechsteEnergieSourceMitEnergie();
+        //var energy = this.sucheNaechsteEnergieSourceMitEnergie();
+        var energy = this.pos.findClosestByPath(FIND_SOURCES, {filter: (s) => s.energy != null});
         if(energy != undefined){
-            if (this.harvest(energy) == ERR_NOT_IN_RANGE){
-                this.moveTo(energy);
+            if (energy.memory != undefined && energy.memory.Container != undefined && Game.getObjectById(energy.memory.Container.id) != undefined && Game.getObjectById(energy.memory.Container.id).progress == null && Game.getObjectById(energy.memory.Container.id).store[RESOURCE_ENERGY] >= this.store.getFreeCapacity()){
+                if(this.withdraw(Game.getObjectById(energy.memory.Container.id), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    this.moveTo(Game.getObjectById(energy.memory.Container.id));
+                }
+                return true;
+            }else{
+                for (let i = 0; i < this.body.length; i++) {
+                    if (this.body[i].type == "work"){
+                        energy = this.sucheNaechsteEnergieSourceMitEnergie();
+                        if (energy != undefined) {
+                            if (this.harvest(energy) == ERR_NOT_IN_RANGE) {
+                                this.moveTo(energy);
+                            }
+                            return true;
+                        }
+                    }
+                }
+                return this.containerEnergieHolen();
             }
-            return true;
         }
         return false;
     };
