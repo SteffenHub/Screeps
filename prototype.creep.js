@@ -6,6 +6,10 @@ const roleMauerRepariere = require("./role.MauerReparierer");
 const roleClaimer = require("./role.Claimer");
 const roleAngreifer = require("./role.Angreifer");
 const roleDistanzUpgrader = require("./role.distanzUpgrader");
+const roleMauerBrecher = require("./role.mauerBrecher");
+const roleDistanzBauerbeiter = require("./role.distanzBauerbeiter");
+const roleMiner = require("./role.Miner");
+
 
 module.exports = function() {
 
@@ -29,6 +33,12 @@ module.exports = function() {
             roleAngreifer.run(this);
         } else if (this.memory.role == 'distanzUpgrader') {
             roleDistanzUpgrader.run(this);
+        } else if (this.memory.role == 'Mauerbrecher') {
+            roleMauerBrecher.run(this);
+        } else if (this.memory.role == 'distanzBauerbeiter') {
+            roleDistanzBauerbeiter.run(this);
+        } else if (this.memory.role == 'Miner') {
+            roleMiner.run(this);
         }
     };
 

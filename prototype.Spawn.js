@@ -116,6 +116,17 @@ module.exports = function() {
                                                             {name: ATTACK, prozent: 54}]),
                                                             argumente);
     };
+    StructureSpawn.prototype.spawnAngreifer = function(zielRaum,geheDurchRaum){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
+        var argumente = {role: 'Angreifer', hauptRaum: this.room.name, 'zielRaum': zielRaum, 'geheDurchRaum': geheDurchRaum};
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                [{name: TOUGH, prozent: 3},
+                    {name: MOVE, prozent: 43},
+                    {name: ATTACK, prozent: 54}]),
+            argumente);
+    };
 
     /**
      * Wenn Energie voll ist wird ein DistantUpgrader gespawnt
@@ -130,6 +141,43 @@ module.exports = function() {
                                                             {name: CARRY, prozent: 50},
                                                             {name: MOVE, prozent: 30}]),
                                                             argumente);
+    };
+
+    StructureSpawn.prototype.spawnMauerBrecher = function(atkX, atkY){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
+        var argumente = {role: 'Mauerbrecher', hauptRaum: this.room.name, 'atkX': atkX, 'atkY': atkY};
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                [{name: TOUGH, prozent: 3},
+                    {name: MOVE, prozent: 49},
+                    {name: ATTACK, prozent: 48}]),
+            argumente);
+    };
+
+    StructureSpawn.prototype.spawnDistanzBauerbeiter = function(zielRaum){
+        if (!this.checkRoomEnergieIsFull()){
+            return;
+        }
+        var argumente = {role: 'distanzBauerbeiter', hauptRaum: this.room.name, 'zielRaum': zielRaum};
+        this.creepErstellen(this.getProzentKonfiguration(this.room.energyCapacityAvailable,
+                [{name: WORK, prozent: 20},
+                    {name: CARRY, prozent: 45},
+                    {name: MOVE, prozent: 35}]),
+            argumente);
+    };
+
+    StructureSpawn.prototype.spawnMiner = function(zielRaum, source){
+        var verfuegbareEnergie = 650;
+        if (this.room.energyCapacityAvailable < 650){
+            verfuegbareEnergie = this.room.energyCapacityAvailable;
+        }
+        var argumente = {role: 'Miner', hauptRaum: this.room.name, 'zielRaum': zielRaum, zielSource: source};
+        this.creepErstellen(this.getProzentKonfiguration(verfuegbareEnergie,
+                [{name: WORK, prozent: 79},
+                    {name: CARRY, prozent: 1},
+                    {name: MOVE, prozent: 20}]),
+            argumente);
     };
 
 
@@ -227,7 +275,7 @@ module.exports = function() {
         }
 
         //die Konfiguration zsm. stellen
-        konfiguration = [];
+        var konfiguration = [];
         for (let i = 0; i < konfigurationTmp.length; i++) {
             for (let j = 0; j < konfigurationTmp[i]; j++) {
                 konfiguration.push(aufbau[i].name);
